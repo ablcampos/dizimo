@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Página de login moderna e segura para o sistema de gestão.">
+    <meta name="theme-color" content="#0f172a">
+    <title>Dízimo | Gestão dos Dizimistas</title>
+    
+    <!-- Modern Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="login-container">
+        <div class="login-card">
+            <header class="login-header">
+                <h2>Bem-vindo</h2>
+                <p>Acesse sua conta para continuar</p>
+            </header>
+            
+            <form id="loginForm" autocomplete="off">
+                <div id="errorMessage" class="error-message">
+                    <!-- Erros serão exibidos aqui -->
+                </div>
+
+                <div class="input-group">
+                    <label for="login">Usuário</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="login" name="login" placeholder=" " required autofocus>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="senha">Senha</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="senha" name="senha" placeholder=" " required autocomplete="new-password">
+                    </div>
+                </div>
+                
+                <button type="submit" class="login-button" id="submitBtn">
+                    <span class="button-text">Entrar no Sistema</span>
+                    <i class="ph ph-arrow-right"></i>
+                </button>
+
+                <footer class="form-footer">
+                    <p>Não tem uma conta? <a href="register.html">Cadastre-se</a></p>
+                </footer>
+            </form>
+        </div>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

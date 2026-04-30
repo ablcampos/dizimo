@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dízimo | Gestão dos Dizimistas</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --success: #10b981;
+            --error: #f43f5e;
+            --warning: #f59e0b;
+            --bg: #f1f5f9;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --sidebar-width: 280px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            left: calc(-1 * var(--sidebar-width));
+            top: 0;
+            bottom: 0;
+            width: var(--sidebar-width);
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            z-index: 1000;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.05);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-header h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .close-menu {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .close-menu:hover {
+            color: var(--primary);
+        }
+
+        .sidebar-menu {
+            padding: 24px 16px;
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            border-radius: 12px;
+            transition: var(--transition);
+        }
+
+        .sidebar-menu a:hover {
+            background: #f8fafc;
+            color: var(--primary);
+            padding-left: 20px;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .menu-toggle {
+            font-size: 32px;
+            cursor: pointer;
+            color: var(--text-main);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            border-radius: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+        }
+
+        .menu-toggle:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .header-title h1 {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .user-welcome {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .header-actions {
+            margin-left: auto;
+        }
+
+        .btn-logout-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--error);
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .btn-logout-header:hover {
+            background: #fff1f2;
+            border-color: #fecdd3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Search Section */
+        .search-section {
+            background: var(--surface);
+            padding: 32px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 32px;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 16px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            outline: none;
+            transition: var(--transition);
+            background: #f8fafc;
+        }
+
+        .search-container input:focus {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn-search {
+            padding: 0 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-search:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Results Area */
+        .results-container {
+            background: var(--surface);
+            min-height: 300px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .results-header {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state {
+            margin: auto;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* Results Table */
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .results-table th {
+            text-align: left;
+            padding: 12px;
+            color: var(--text-muted);
+            font-size: 13px;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .results-table td {
+            padding: 16px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .results-table tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .results-table tbody tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .colab-id {
+            background: var(--primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            display: inline-block;
+        }
+
+        .colab-name {
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 14px;
+        }
+
+        .profile-badge {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+       
+        .btn-liberar {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-liberar:hover {
+            background: #047857;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+        }
+
+        .btn-edit {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.1);
+        }
+
+        .btn-view-icon {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.1);
+        }
+
+        .btn-view-icon:hover {
+            background: #d97706;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+        }
+
+        .btn-edit:hover {
+            background: #d97706;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .view-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        .idsenha-badge {
+            background: #334155;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--surface);
+            padding: 40px;
+            border-radius: 24px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+            transform: scale(0.9);
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            font-size: 64px;
+            color: var(--success);
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        .modal h2 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .modal p {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @media (max-width: 640px) {
+            .main-content {
+                padding: 20px 16px;
+            }
+            .results-container {
+                padding: 16px;
+            }
+            .search-container {
+                flex-direction: column;
+            }
+            .btn-search {
+                padding: 16px;
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Detail View Styles */
+        .detail-card {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 32px;
+            border-radius: 20px;
+            margin-top: 16px;
+        }
+
+        .detail-card h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        .months-highlight {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.2);
+            white-space: pre-wrap;
+            text-align: center;
+        }
+
+        .btn-new-search {
+            background: var(--text-muted);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 auto;
+        }
+
+        .btn-new-search:hover {
+            background: var(--text-main);
+            transform: translateY(-2px);
+        }
+
+        /* Registration Form Styles */
+        .registration-form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .registration-form .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .registration-form label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+        .registration-form input {
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: #f8fafc;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        .registration-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .required-asterisk {
+            color: var(--error);
+            margin-left: 4px;
+            font-weight: bold;
+        }
+
+        /* Responsive Tables Adjustment */
+        @media (max-width: 640px) {
+            .results-table thead {
+                display: none;
+            }
+
+            .results-table tr {
+                display: flex;
+                flex-wrap: wrap;
+                padding: 12px 0;
+                border-bottom: 2px solid var(--border);
+                gap: 4px;
+            }
+
+            .results-table td {
+                display: block;
+                border: none;
+                padding: 6px 12px;
+                font-size: 12px; /* Redução de 15% */
+            }
+
+            /* Consulta de Dizimistas: ID minúsculo e Nome com espaço máximo */
+            #sectionPesquisa .results-table td:nth-child(1) { 
+                flex: 0 0 45px; 
+                padding-right: 0; 
+            }
+            #sectionPesquisa .results-table td:nth-child(2) { 
+                flex: 1; 
+                font-weight: 700; 
+                padding-left: 0;
+            }
+            
+            /* Ações para a segunda linha */
+            #sectionPesquisa .results-table td:nth-child(3) {
+                flex: 1 0 100%;
+                margin-top: 4px;
+                padding-top: 10px;
+                border-top: 1px solid var(--border);
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            #sectionPesquisa .action-buttons {
+                justify-content: flex-end;
+            }
+        }
+
+        @media (max-width: 542px) {
+            .results-table td {
+                font-size: 10px; /* Redução de aproximadamente 30% */
+            }
+
+            /* Redução de títulos e cabeçalhos */
+            .header-title h1 {
+                font-size: 18px;
+            }
+            .results-header {
+                font-size: 10px;
+            }
+            .user-welcome {
+                font-size: 11px;
+            }
+
+            /* Liberar Novos Usuários: Somente o botão de ação para a segunda linha */
+            #sectionLiberar .results-table tr {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                padding: 12px 0;
+            }
+
+            #sectionLiberar .results-table td:nth-child(1) { 
+                flex: 0 0 45px; 
+                padding-right: 0; 
+            }
+            #sectionLiberar .results-table td:nth-child(2) { 
+                flex: 1; 
+                font-weight: 700; 
+                padding-left: 0;
+            }
+            #sectionLiberar .results-table td:nth-child(3) { 
+                flex: 0 0 70px; 
+                text-align: right; 
+                padding-left: 0;
+            }
+
+            /* Botão de ação na segunda linha alinhado à direita */
+            #sectionLiberar .results-table td:nth-child(4) {
+                flex: 1 0 100%;
+                margin-top: 8px;
+                padding: 8px 12px;
+                border-top: 1px dashed var(--border);
+                background: rgba(79, 70, 229, 0.03);
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            #sectionLiberar .action-buttons {
+                justify-content: flex-end;
+                gap: 8px;
+            }
+
+            /* Ajuste de escala para elementos internos */
+            #sectionLiberar .btn-liberar, 
+            #sectionLiberar .btn-edit,
+            #sectionLiberar .idsenha-badge {
+                font-size: 9px;
+                padding: 4px 8px;
+            }
+            #sectionLiberar .btn-liberar i, #sectionLiberar .btn-edit i {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Menu -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Modal de Sucesso -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <i class="ph ph-check-circle modal-icon"></i>
+            <h2>Liberação Concluída!</h2>
+            <p>O usuário foi liberado com sucesso e já tem permissão para acessar todas as funcionalidades do sistema.</p>
+            <button class="modal-btn" id="btnModalClose">Retornar à Pesquisa</button>
+        </div>
+    </div>
+
+    <!-- Modal de Acesso Negado -->
+    <div class="modal-overlay" id="modalAccessDenied">
+        <div class="modal">
+            <i class="ph ph-lock-keyhole modal-icon" style="color: var(--error); animation: shake 0.5s ease-in-out;"></i>
+            <h2 style="color: var(--text-main);">Acesso Restrito</h2>
+            <p id="accessDeniedMessage">Esta funcionalidade é exclusiva para usuários com perfil <strong>GERENTE</strong>.</p>
+            <button class="modal-btn" style="background: var(--text-main);" onclick="document.getElementById('modalAccessDenied').classList.remove('active')">Entendido</button>
+        </div>
+    </div>
+
+    <!-- Modal de Sucesso Genérico -->
+    <div class="modal-overlay" id="modalSuccessGeneric">
+        <div class="modal">
+            <i class="ph ph-check-circle modal-icon" style="color: var(--success); animation: bounce 2s infinite;"></i>
+            <h2 id="successTitle">Sucesso!</h2>
+            <p id="successMessage">Operação realizada com êxito.</p>
+            <button class="modal-btn" onclick="document.getElementById('modalSuccessGeneric').classList.remove('active'); switchView('pesquisa');">Entendido</button>
+        </div>
+    </div>
+
+    <!-- Modal de Aviso (Campos Obrigatórios) -->
+    <div class="modal-overlay" id="modalWarning">
+        <div class="modal">
+            <i class="ph ph-warning-circle modal-icon" style="color: var(--warning); animation: shake 0.5s ease-in-out;"></i>
+            <h2 style="color: var(--text-main);">Informação Necessária</h2>
+            <p id="warningMessage">Por favor, preencha todos os campos obrigatórios para continuar.</p>
+            <button class="modal-btn" style="background: var(--warning);" onclick="document.getElementById('modalWarning').classList.remove('active')">Revisar Cadastro</button>
+        </div>
+    </div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Navegação</h2>
+            <i class="ph ph-x close-menu" id="closeMenu"></i>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#" id="btnViewPesquisa"><i class="ph ph-magnifying-glass"></i> Retornar a Pesquisa</a></li>
+            <li><a href="#" id="btnViewLiberar"><i class="ph ph-user-check"></i> Liberar Usuário</a></li>
+            <li><a href="#" id="btnViewCadastrar"><i class="ph ph-user-plus"></i> Cadastrar Dizimista</a></li>
+            <li><a href="#" id="btnViewGerente"><i class="ph ph-shield-check"></i> Acesso Gerente</a></li>
+            <li style="margin-top: 32px; border-top: 1px solid var(--border); padding-top: 16px;">
+                <a href="index.html" style="color: var(--error);">
+                    <i class="ph ph-sign-out"></i> Sair do Sistema
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header>
+            <div class="menu-toggle" id="menuToggle">
+                <i class="ph ph-list"></i>
+            </div>
+            <div class="header-title">
+                <h1>Painel de Controle</h1>
+                <div class="user-welcome" id="userWelcome">BEM-VINDO, USUÁRIO</div>
+            </div>
+            <div class="header-actions">
+                <a href="index.html" class="btn-logout-header" id="btnLogout">
+                    <i class="ph ph-sign-out"></i>
+                    Sair
+                </a>
+            </div>
+        </header>
+
+        <!-- View: Pesquisa -->
+        <div id="sectionPesquisa" class="view-section active">
+            <section class="search-section">
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <input type="text" id="searchInput" placeholder="O que você está procurando?">
+                    </div>
+                    <button class="btn-search" id="btnSearch">
+                        <i class="ph ph-magnifying-glass"></i>
+                    </button>
+                </div>
+            </section>
+
+            <section class="results-container" id="resultsContainer">
+                <div class="results-header">Resultados da Pesquisa</div>
+                <div class="empty-state" id="emptyState">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <p>Digite algo para pesquisar e os resultados aparecerão aqui.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- View: Liberar Usuário -->
+        <div id="sectionLiberar" class="view-section">
+            <section class="results-container">
+                <div class="results-header">Usuários Pendentes (Perfil: NOVO)</div>
+                <div id="liberarTableContainer">
+                    <div class="empty-state" id="emptyStateLiberar">
+                        <i class="ph ph-users"></i>
+                        <p>Carregando usuários pendentes...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- View: Detalhes do Dizimista -->
+        <div id="sectionDetalhes" class="view-section">
+            <section class="results-container">
+                <div class="results-header">Ficha do Dizimista</div>
+                <div id="detalhesContainer">
+                    <!-- Conteúdo dinâmico aqui -->
+                </div>
+            </section>
+        </div>
+
+        <!-- View: Cadastrar Dizimista -->
+        <div id="sectionCadastrar" class="view-section">
+            <section class="results-container">
+                <div class="results-header">Novo Cadastro de Dizimista</div>
+                <form id="formCadastrarDizimista" class="registration-form" novalidate>
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label for="regNome">Nome Completo <span class="required-asterisk">*</span></label>
+                            <input type="text" id="regNome" maxlength="40" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="regEndereco">Endereço</label>
+                            <input type="text" id="regEndereco" maxlength="55">
+                        </div>
+                        <div class="input-group">
+                            <label for="regBairro">Bairro</label>
+                            <input type="text" id="regBairro" maxlength="25">
+                        </div>
+                        <div class="input-group">
+                            <label for="regCidade">Cidade</label>
+                            <input type="text" id="regCidade" value="RIO BONITO" maxlength="30">
+                        </div>
+                        <div class="input-group">
+                            <label for="regUF">UF</label>
+                            <input type="text" id="regUF" value="RJ" maxlength="2">
+                        </div>
+                        <div class="input-group">
+                            <label for="regTelefone">Telefone</label>
+                            <input type="text" id="regTelefone" maxlength="20">
+                        </div>
+                        <div class="input-group">
+                            <label for="regCPF">CPF</label>
+                            <input type="text" id="regCPF" maxlength="15">
+                        </div>
+                        <div class="input-group">
+                            <label for="regEmail">E-mail</label>
+                            <input type="email" id="regEmail" maxlength="50">
+                        </div>
+                        <div class="input-group">
+                            <label for="regReferencia">Referência</label>
+                            <input type="text" id="regReferencia" maxlength="50">
+                        </div>
+                        <div class="input-group">
+                            <label for="regNascimento">Data de Nascimento (DD/MM/AAAA) <span class="required-asterisk">*</span></label>
+                            <input type="text" id="regNascimento" placeholder="00/00/0000" maxlength="10">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-new-search" onclick="switchView('pesquisa')">
+                            <i class="ph ph-arrow-left"></i> Retornar
+                        </button>
+                        <button type="submit" class="modal-btn" style="width: auto; padding: 12px 32px;">
+                            <i class="ph ph-floppy-disk"></i> Gravar Cadastro
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </div>
+        <!-- View: Lançar Dízimo -->
+        <div id="sectionLancarDizimo" class="view-section">
+            <section class="results-container">
+                <div class="results-header">Lançamento de Dízimo</div>
+                <div class="detail-card" style="max-width: 600px; margin: 0 auto; border-top: 4px solid var(--success);">
+                    <div style="text-align: center; margin-bottom: 32px;">
+                        <div style="width: 64px; height: 64px; background: rgba(34, 197, 94, 0.1); color: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                            <i class="ph ph-currency-dollar" style="font-size: 32px;"></i>
+                        </div>
+                        <h2 id="lancarDizimoNome" style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 4px;">NOME DO DIZIMISTA</h2>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">ID: <span id="lancarDizimoID">0000</span></p>
+                    </div>
+                    
+                    <form id="formLancarDizimo" class="registration-form" novalidate>
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label for="titData" style="font-weight: 600; color: var(--text-muted); margin-bottom: 8px; display: block;">Data do Dízimo</label>
+                                <input type="text" id="titData" maxlength="10" placeholder="00/00/0000" required style="font-size: 16px; height: 48px; width: 100%;">
+                            </div>
+                            <div class="input-group">
+                                <label for="titValor" style="font-weight: 600; color: var(--text-muted); margin-bottom: 8px; display: block;">Valor</label>
+                                <input type="text" id="titValor" value="0,00" required style="font-weight: 700; color: var(--success); font-size: 16px; height: 48px; border-color: var(--success); width: 100%;">
+                            </div>
+                        </div>
+                        <div class="form-actions" style="margin-top: 32px;">
+                            <button type="button" class="btn-new-search" onclick="switchView('pesquisa')" style="background: var(--primary); border: none; height: 48px; padding: 0 32px; font-weight: 600; color: white; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);">
+                                <i class="ph ph-arrow-left" style="color: white;"></i> Retornar
+                            </button>
+                            <button type="submit" class="modal-btn" style="width: auto; height: 48px; padding: 0 40px; background: var(--success); border: none; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); font-weight: 600; color: white;">
+                                <i class="ph ph-floppy-disk" style="color: white;"></i> Gravar Lançamento
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+
+        <!-- View: Acesso Gerente -->
+        <div id="sectionAcessoGerente" class="view-section">
+            <section class="results-container">
+                <div class="results-header">Gerenciamento de Acessos</div>
+                <div id="gerenteTableContainer">
+                    <div class="empty-state">
+                        <i class="ph ph-users-three"></i>
+                        <p>Carregando lista de usuários...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <script src="config.js"></script>
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const closeMenu = document.getElementById('closeMenu');
+        const overlay = document.getElementById('overlay');
+        const searchInput = document.getElementById('searchInput');
+        const btnSearch = document.getElementById('btnSearch');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const emptyState = document.getElementById('emptyState');
+        const userWelcome = document.getElementById('userWelcome');
+        const btnLogout = document.getElementById('btnLogout');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const btnModalClose = document.getElementById('btnModalClose');
+        const btnViewCadastrar = document.getElementById('btnViewCadastrar');
+        const btnViewGerente = document.getElementById('btnViewGerente');
+
+        // VARIÁVEL GLOBAL PARA O NOME E PERFIL
+        window.NOME_USUARIO = new URLSearchParams(window.location.search).get('usuario') || 'VISITANTE';
+        window.USER_PROFILE = (sessionStorage.getItem('userProfile') || '').toUpperCase(); 
+
+        // EXIBE O NOME NA TELA E BUSCA O PERFIL SE NÃO EXISTIR
+        userWelcome.textContent = `BEM-VINDO, ${window.NOME_USUARIO.toUpperCase()}`;
+        
+        async function buscarPerfilUsuario() {
+            // Se já temos o perfil do login, não precisamos buscar de novo
+            if (window.USER_PROFILE) {
+                console.log('Perfil recuperado da sessão:', window.USER_PROFILE);
+                return;
+            }
+
+            try {
+                // Fallback: Busca o perfil do usuário logado na tabela senha se a sessão falhar
+                const query = `Select perfil from senha where login = '${window.NOME_USUARIO}'`;
+                const response = await fetch(`${API_BASE_URL}/config_txt/${encodeURIComponent(query)}`);
+                const data = await response.json();
+                if (data && data.length > 0) {
+                    window.USER_PROFILE = (data[0].perfil || '').toUpperCase();
+                    sessionStorage.setItem('userProfile', window.USER_PROFILE);
+                    console.log('Perfil do usuário buscado via API:', window.USER_PROFILE);
+                }
+            } catch (error) {
+                console.error('Erro ao buscar perfil:', error);
+            }
+        }
+        buscarPerfilUsuario();
+
+        // View Management
+        const btnViewPesquisa = document.getElementById('btnViewPesquisa');
+        const btnViewLiberar = document.getElementById('btnViewLiberar');
+        const sectionPesquisa = document.getElementById('sectionPesquisa');
+        const sectionLiberar = document.getElementById('sectionLiberar');
+        const sectionDetalhes = document.getElementById('sectionDetalhes');
+        const sectionCadastrar = document.getElementById('sectionCadastrar');
+        const sectionAcessoGerente = document.getElementById('sectionAcessoGerente');
+        const sectionLancarDizimo = document.getElementById('sectionLancarDizimo');
+        const detalhesContainer = document.getElementById('detalhesContainer');
+        const gerenteTableContainer = document.getElementById('gerenteTableContainer');
+        const headerTitle = document.querySelector('.header-title h1');
+
+        function switchView(view) {
+            sectionPesquisa.classList.remove('active');
+            sectionLiberar.classList.remove('active');
+            sectionDetalhes.classList.remove('active');
+            sectionCadastrar.classList.remove('active');
+            sectionAcessoGerente.classList.remove('active');
+            sectionLancarDizimo.classList.remove('active');
+            
+            if (view === 'pesquisa') {
+                sectionPesquisa.classList.add('active');
+                headerTitle.textContent = 'Pesquisar Dizimistas';
+                setTimeout(() => searchInput.focus(), 100);
+            } else if (view === 'liberar') {
+                sectionLiberar.classList.add('active');
+                headerTitle.textContent = 'Liberar Novos Usuários';
+                carregarUsuariosNovos();
+            } else if (view === 'detalhes') {
+                sectionDetalhes.classList.add('active');
+                headerTitle.textContent = 'Detalhes do Dizimista';
+            } else if (view === 'cadastrar') {
+                sectionCadastrar.classList.add('active');
+                headerTitle.textContent = 'Cadastrar Novo Dizimista';
+                resetFormCadastrar();
+                document.getElementById('regNome').focus();
+            } else if (view === 'gerente') {
+                sectionAcessoGerente.classList.add('active');
+                headerTitle.textContent = 'Acesso Gerente';
+                carregarTodosUsuarios();
+            } else if (view === 'lancar') {
+                sectionLancarDizimo.classList.add('active');
+                headerTitle.textContent = 'Lançar Dízimo';
+            }
+            if (sidebar.classList.contains('active')) toggleSidebar();
+        }
+
+        function resetFormCadastrar() {
+            const form = document.getElementById('formCadastrarDizimista');
+            form.reset();
+            // Restaura padrões explicitamente
+            document.getElementById('regCidade').value = 'RIO BONITO';
+            document.getElementById('regUF').value = 'RJ';
+            document.getElementById('regNascimento').value = '';
+        }
+
+        btnViewPesquisa.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchView('pesquisa');
+        });
+
+        btnViewLiberar.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Verifica se o usuário tem permissão
+            if (window.USER_PROFILE !== 'GERENTE') {
+                const modal = document.getElementById('modalAccessDenied');
+                const msg = document.getElementById('accessDeniedMessage');
+                msg.innerHTML = `Desculpe, <strong>${window.NOME_USUARIO}</strong>. <br> Esta funcionalidade é exclusiva para usuários com perfil <strong>GERENTE</strong>.`;
+                modal.classList.add('active');
+                switchView('pesquisa');
+                return;
+            }
+            
+            switchView('liberar');
+        });
+
+        btnViewCadastrar.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Verifica se o usuário tem permissão
+            if (window.USER_PROFILE !== 'GERENTE') {
+                const modal = document.getElementById('modalAccessDenied');
+                const msg = document.getElementById('accessDeniedMessage');
+                msg.innerHTML = `Desculpe, <strong>${window.NOME_USUARIO}</strong>. <br> Esta funcionalidade é exclusiva para usuários com perfil <strong>GERENTE</strong>.`;
+                modal.classList.add('active');
+                switchView('pesquisa');
+                return;
+            }
+            
+            switchView('cadastrar');
+        });
+
+        btnViewGerente.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Verifica se o usuário tem permissão
+            if (window.USER_PROFILE !== 'GERENTE') {
+                const modal = document.getElementById('modalAccessDenied');
+                const msg = document.getElementById('accessDeniedMessage');
+                msg.innerHTML = `Desculpe, <strong>${window.NOME_USUARIO}</strong>. <br> Esta funcionalidade é exclusiva para usuários com perfil <strong>GERENTE</strong>.`;
+                modal.classList.add('active');
+                switchView('pesquisa');
+                return;
+            }
+            
+            switchView('gerente');
+        });
+
+        // Uppercase conversion and date mask for all registration inputs
+        const regForm = document.getElementById('formCadastrarDizimista');
+        const inputNascimento = document.getElementById('regNascimento');
+
+        regForm.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', () => {
+                if (input.id !== 'regNascimento') {
+                    input.value = input.value.toUpperCase();
+                }
+            });
+        });
+
+        // Date mask DD/MM/AAAA
+        inputNascimento.addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 8) v = v.substring(0, 8);
+            
+            if (v.length > 4) {
+                v = v.replace(/^(\d{2})(\d{2})(\d{0,4}).*/, '$1/$2/$3');
+            } else if (v.length > 2) {
+                v = v.replace(/^(\d{2})(\d{0,2}).*/, '$1/$2');
+            }
+            e.target.value = v;
+        });
+
+        function validarData(data) {
+            const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+            if (!regex.test(data)) return false;
+            const [_, d, m, a] = data.match(regex);
+            const date = new Date(a, m - 1, d);
+            return date.getFullYear() == a && date.getMonth() == m - 1 && date.getDate() == d;
+        }
+
+        regForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const nome = document.getElementById('regNome').value.trim();
+            const dataNasc = inputNascimento.value.trim();
+
+            // Validação de campos obrigatórios
+            if (!nome || !dataNasc) {
+                const modal = document.getElementById('modalWarning');
+                const msg = document.getElementById('warningMessage');
+                msg.innerHTML = `Os campos <strong>NOME</strong> e <strong>DATA DE NASCIMENTO</strong> são obrigatórios para a realização do cadastro.`;
+                modal.classList.add('active');
+                return;
+            }
+            
+            if (dataNasc && !validarData(dataNasc)) {
+                const modal = document.getElementById('modalWarning');
+                const msg = document.getElementById('warningMessage');
+                msg.innerHTML = `A <strong>DATA DE NASCIMENTO</strong> digitada é inválida. Por favor, use o formato DD/MM/AAAA.`;
+                modal.classList.add('active');
+                inputNascimento.focus();
+                return;
+            }
+
+            // Converte DD/MM/AAAA para YYYY-MM-DD para o banco
+            let nascimentoISO = "";
+            if (dataNasc) {
+                const [d, m, a] = dataNasc.split('/');
+                nascimentoISO = `${a}-${m}-${d}`;
+            }
+
+            // Monta o JSON conforme solicitado
+            const payload = {
+                "IDCOLAB": "",
+                "NOME": document.getElementById('regNome').value,
+                "ENDE": document.getElementById('regEndereco').value,
+                "BAIRRO": document.getElementById('regBairro').value,
+                "CIDADE": document.getElementById('regCidade').value,
+                "UF": document.getElementById('regUF').value,
+                "TELE": document.getElementById('regTelefone').value,
+                "CPF": document.getElementById('regCPF').value,
+                "EMAIL": document.getElementById('regEmail').value,
+                "ATIVO": "S",
+                "REFERENCIA": document.getElementById('regReferencia').value,
+                "NASCIMENTO": nascimentoISO
+            };
+
+            console.log('Enviando JSON:', JSON.stringify(payload));
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/colaborador`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (response.ok) {
+                    const modal = document.getElementById('modalSuccessGeneric');
+                    document.getElementById('successTitle').textContent = 'Cadastro Realizado!';
+                    document.getElementById('successMessage').innerHTML = `O dizimista <strong>${payload.NOME}</strong> foi cadastrado com sucesso no sistema.`;
+                    modal.classList.add('active');
+                    
+                    resetFormCadastrar();
+                } else {
+                    const errData = await response.json().catch(() => ({}));
+                    alert('Erro ao gravar: ' + (errData.message || response.statusText));
+                }
+            } catch (error) {
+                console.error('Erro ao gravar:', error);
+                alert('Erro de conexão com o servidor.');
+            }
+        });
+
+        // Toggle Sidebar
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        menuToggle.addEventListener('click', toggleSidebar);
+        closeMenu.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+
+        // Search Functionality (Real API)
+        btnSearch.addEventListener('click', async () => {
+            const query = searchInput.value.trim().toUpperCase();
+            if (!query) return;
+
+            // Interface de Carregamento
+            btnSearch.disabled = true;
+            const originalIcon = btnSearch.innerHTML;
+            btnSearch.innerHTML = '<i class="ph ph-circle-notch ph-spin"></i>';
+            
+            emptyState.innerHTML = '<i class="ph ph-circle-notch ph-spin"></i><p>Pesquisando colaboradores...</p>';
+            emptyState.style.display = 'flex';
+            emptyState.style.flexDirection = 'column';
+            emptyState.style.alignItems = 'center';
+            emptyState.style.gap = '16px';
+
+            // Remove tabela anterior se houver
+            const existingTable = resultsContainer.querySelector('.results-table');
+            if (existingTable) existingTable.remove();
+
+            try {
+                // Chamada para a API
+                const response = await fetch(`${API_BASE_URL}/colaborador/procura/${query}/S`);
+                const data = await response.json();
+
+                if (data && data.length > 0) {
+                    emptyState.style.display = 'none';
+                    
+                    const table = document.createElement('table');
+                    table.className = 'results-table';
+                    table.innerHTML = `
+                        <thead>
+                            <tr>
+                                <th style="width: 100px;">ID</th>
+                                <th>Dizimista</th>
+                                <th style="text-align: right;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.map(item => `
+                                <tr>
+                                    <td><span class="colab-id">${item.idcolab}</span></td>
+                                    <td><span class="colab-name">${item.nome}</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn-view-icon" onclick="lancarDizimo(${item.idcolab}, '${item.nome.replace(/'/g, "\\'")}')" title="Lançar Dízimo" style="background: var(--success);">
+                                                <i class="ph ph-currency-dollar"></i>
+                                            </button>
+                                            <button class="btn-view-icon" onclick="visualizarRegistro(${item.idcolab})" title="Visualizar">
+                                                <i class="ph ph-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    `;
+                    resultsContainer.appendChild(table);
+                } else {
+                    emptyState.innerHTML = '<i class="ph ph-warning-circle"></i><p>Nenhum colaborador encontrado com este nome.</p>';
+                }
+            } catch (error) {
+                console.error('Erro na pesquisa:', error);
+                emptyState.innerHTML = '<i class="ph ph-warning-circle" style="color: var(--error)"></i><p style="color: var(--error)">Erro de conexão com a API.</p>';
+            } finally {
+                btnSearch.disabled = false;
+                btnSearch.innerHTML = originalIcon;
+            }
+        });
+
+        // Search on Enter
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                btnSearch.click();
+            }
+        });
+
+        // Uppercase conversion for search (consistency)
+        searchInput.addEventListener('input', () => {
+            searchInput.value = searchInput.value.toUpperCase();
+        });
+        // Foca no campo de pesquisa ao abrir a página
+        searchInput.focus();
+
+        async function carregarUsuariosNovos() {
+            const container = document.getElementById('liberarTableContainer');
+            
+            // Limpa a tabela anterior e mostra o estado de carregamento
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="ph ph-circle-notch ph-spin"></i>
+                    <p>Buscando usuários pendentes...</p>
+                </div>
+            `;
+            
+            try {
+                // Endpoint conforme solicitado pelo usuário
+                const query = "Select * from senha where perfil ='NOVO'";
+                const response = await fetch(`${API_BASE_URL}/config_txt/${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                if (data && data.length > 0) {
+                    container.innerHTML = `
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 100px;">ID Senha</th>
+                                    <th>Usuário</th>
+                                    <th>Perfil</th>
+                                    <th style="text-align: right;">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.map(user => `
+                                    <tr>
+                                        <td><span class="idsenha-badge">${user.idsenha}</span></td>
+                                        <td><span class="colab-name">${user.nome || 'SEM NOME'}</span></td>
+                                        <td><span class="profile-badge">${user.perfil}</span></td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn-edit" onclick="liberarUsuario(${user.idsenha})">
+                                                    <i class="ph ph-user-check"></i> Liberar
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                } else {
+                    container.innerHTML = '<div class="empty-state"><i class="ph ph-check-circle"></i><p>NÃO EXISTE USUARIOS PENDENTES</p></div>';
+                }
+            } catch (error) {
+                console.error('Erro ao carregar usuários:', error);
+                container.innerHTML = '<div class="empty-state"><i class="ph ph-warning-circle" style="color: var(--error)"></i><p style="color: var(--error)">Erro ao carregar dados da API.</p></div>';
+            }
+        }
+
+        // Funções para os botões de ação
+        window.liberarUsuario = async function(id) {
+            try {
+                // Endpoint de UPDATE conforme solicitado
+                const query = `update senha set perfil ='' where idsenha= ${id}`;
+                const response = await fetch(`${API_BASE_URL}/config_txt/${encodeURIComponent(query)}`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    // Exibe o modal profissional
+                    modalOverlay.classList.add('active');
+                } else {
+                    alert('Erro ao processar liberação na API.');
+                }
+            } catch (error) {
+                console.error('Erro na liberação:', error);
+                alert('Erro de conexão ao tentar liberar o usuário.');
+            }
+        }
+
+        window.visualizarRegistro = async function(id) {
+            const currentYear = new Date().getFullYear();
+            
+            // Query SQL formatada conforme solicitado
+            const query = `SELECT C.IDCOLAB AS CLI, C.NOME, ` +
+                        `LIST(CASE EXTRACT(MONTH FROM DATA) ` +
+                        `WHEN 1 THEN 'JAN' WHEN 2 THEN 'FEV' WHEN 3 THEN 'MAR' WHEN 4 THEN 'ABR' ` +
+                        `WHEN 5 THEN 'MAI' WHEN 6 THEN 'JUN' WHEN 7 THEN 'JUL' WHEN 8 THEN 'AGO' ` +
+                        `WHEN 9 THEN 'SET' WHEN 10 THEN 'OUT' WHEN 11 THEN 'NOV' WHEN 12 THEN 'DEZ' ` +
+                        `END , '    ') AS MESES ` +
+                        `FROM COLABORADORES C ,DIZIMO D ` +
+                        `WHERE D.CLI = C.IDCOLAB AND EXTRACT(YEAR FROM D.DATA) = ${currentYear} ` +
+                        `AND C.IDCOLAB = ${id} ` +
+                        `GROUP BY C.IDCOLAB, C.NOME ORDER BY C.NOME`;
+
+            // Mostra carregamento
+            detalhesContainer.innerHTML = `
+                <div class="empty-state">
+                    <i class="ph ph-circle-notch ph-spin"></i>
+                    <p>Buscando detalhes do dizimista...</p>
+                </div>
+            `;
+            switchView('detalhes');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/config_txt/${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                if (data && data.length > 0) {
+                    const registro = data[0];
+                    detalhesContainer.innerHTML = `
+                        <div class="detail-card">
+                            <h2>${registro.nome}</h2>
+                            <div class="months-highlight">${registro.meses || 'NENHUM MÊS REGISTRADO NESTE ANO'}</div>
+                            <button class="btn-new-search" onclick="switchView('pesquisa')">
+                                <i class="ph ph-magnifying-glass"></i>
+                                Nova Pesquisa
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    detalhesContainer.innerHTML = `
+                        <div class="empty-state">
+                            <i class="ph ph-warning-circle"></i>
+                            <p>Nenhum dado financeiro encontrado para este dizimista no ano de ${currentYear}.</p>
+                            <button class="btn-new-search" onclick="switchView('pesquisa')" style="margin-top: 20px;">
+                                <i class="ph ph-arrow-left"></i> Voltar à Pesquisa
+                            </button>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Erro ao visualizar registro:', error);
+                detalhesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="ph ph-warning-circle" style="color: var(--error)"></i>
+                        <p style="color: var(--error)">Erro de conexão ao buscar dados na API.</p>
+                        <button class="btn-new-search" onclick="switchView('pesquisa')" style="margin-top: 20px;">
+                            <i class="ph ph-arrow-left"></i> Voltar
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        async function carregarTodosUsuarios() {
+            const container = document.getElementById('gerenteTableContainer');
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="ph ph-circle-notch ph-spin"></i>
+                    <p>Consultando banco de dados...</p>
+                </div>
+            `;
+
+            try {
+                const query = "Select idsenha, nome, perfil from senha order by nome";
+                const response = await fetch(`${API_BASE_URL}/config_txt/${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                if (data && data.length > 0) {
+                    container.innerHTML = `
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 80px;">ID</th>
+                                    <th>Usuário</th>
+                                    <th>Perfil Atual</th>
+                                    <th style="text-align: right;">Alterar Acesso</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.map(user => `
+                                    <tr>
+                                        <td><span class="idsenha-badge">${user.idsenha}</span></td>
+                                        <td><span class="colab-name">${user.nome || 'SEM NOME'}</span></td>
+                                        <td><span class="profile-badge" style="color: ${user.perfil === 'GERENTE' ? 'var(--error)' : 'var(--primary)'};">
+                                            ${user.perfil || 'PADRÃO'}
+                                        </span></td>
+                                        <td>
+                                            <div class="action-buttons" style="justify-content: flex-end;">
+                                                <button class="btn-edit" onclick="alterarPerfilUsuario(${user.idsenha}, 'GERENTE')" style="background: var(--success); padding: 8px 12px; font-size: 11px; width: 90px; justify-content: center;">
+                                                    <i class="ph ph-shield-check"></i> Gerente
+                                                </button>
+                                                <button class="btn-edit" onclick="alterarPerfilUsuario(${user.idsenha}, '')" style="background: var(--text-muted); padding: 8px 12px; font-size: 11px; width: 90px; justify-content: center;">
+                                                    <i class="ph ph-user"></i> Default
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="ph ph-user-minus"></i>
+                            <p>Nenhum usuário encontrado.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Erro ao carregar usuários:', error);
+                container.innerHTML = `<div class="error-message">Erro ao conectar com a API.</div>`;
+            }
+        }
+
+        async function alterarPerfilUsuario(id, novoPerfil) {
+            try {
+                const query = `update senha set perfil = '${novoPerfil}' where idsenha = ${id}`;
+                const response = await fetch(`${API_BASE_URL}/config_txt/${encodeURIComponent(query)}`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    const modal = document.getElementById('modalSuccessGeneric');
+                    document.getElementById('successTitle').textContent = 'Perfil Atualizado!';
+                    document.getElementById('successMessage').textContent = `O acesso do usuário foi alterado para ${novoPerfil || 'DEFAULT'} com sucesso.`;
+                    modal.classList.add('active');
+                    carregarTodosUsuarios(); // Recarrega a lista
+                } else {
+                    alert('Erro ao atualizar perfil.');
+                }
+            } catch (error) {
+                console.error('Erro na requisição:', error);
+                alert('Erro de conexão.');
+            }
+        }
+
+        window.editarRegistro = function(id) {
+            alert('Abrindo edição para o ID: ' + id);
+        }
+
+        window.lancarDizimo = function(id, nome) {
+            // Verifica se o usuário tem permissão
+            if (window.USER_PROFILE !== 'GERENTE') {
+                const modal = document.getElementById('modalAccessDenied');
+                const msg = document.getElementById('accessDeniedMessage');
+                msg.innerHTML = `Desculpe, <strong>${window.NOME_USUARIO}</strong>. <br> Esta funcionalidade é exclusiva para usuários com perfil <strong>GERENTE</strong>.`;
+                modal.classList.add('active');
+                return;
+            }
+
+            const spanID = document.getElementById('lancarDizimoID');
+            const h2Nome = document.getElementById('lancarDizimoNome');
+            spanID.textContent = id;
+            h2Nome.textContent = nome;
+            
+            // Preenche data atual DD/MM/AAAA
+            const hoje = new Date();
+            const d = String(hoje.getDate()).padStart(2, '0');
+            const m = String(hoje.getMonth() + 1).padStart(2, '0');
+            const a = hoje.getFullYear();
+            document.getElementById('titData').value = `${d}/${m}/${a}`;
+            
+            // Preenche valor 0
+            document.getElementById('titValor').value = "0,00";
+            
+            switchView('lancar');
+        }
+
+        // Lógica de envio do Dízimo
+        const formLancarDizimo = document.getElementById('formLancarDizimo');
+        const inputTitDataLancar = document.getElementById('titData');
+        const inputTitValor = document.getElementById('titValor');
+
+        // Máscara de data para o lançamento
+        inputTitDataLancar.addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 8) v = v.substring(0, 8);
+            if (v.length > 4) v = v.replace(/^(\d{2})(\d{2})(\d{0,4}).*/, '$1/$2/$3');
+            else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,2}).*/, '$1/$2');
+            e.target.value = v;
+        });
+
+        // Máscara de Moeda (0,00)
+        inputTitValor.addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v === '') v = '0';
+            v = (parseInt(v) / 100).toFixed(2).replace('.', ',');
+            e.target.value = v;
+        });
+
+        formLancarDizimo.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log('Iniciando processo de gravação...');
+            
+            const id = document.getElementById('lancarDizimoID').textContent;
+            const dataStr = document.getElementById('titData').value;
+            const valorFormatado = document.getElementById('titValor').value;
+
+            // Validação de Data
+            if (!validarData(dataStr)) {
+                const modal = document.getElementById('modalWarning');
+                const msg = document.getElementById('warningMessage');
+                msg.innerHTML = `A <strong>DATA DO DÍZIMO</strong> digitada é inválida. Por favor, use o formato DD/MM/AAAA.`;
+                modal.classList.add('active');
+                return;
+            }
+
+            // Converte DD/MM/AAAA para YYYY-MM-DD
+            const [d, m, a] = dataStr.split('/');
+            const dataISO = `${a}-${m}-${d}`;
+
+            // Mantém a vírgula conforme solicitado
+            const valor = valorFormatado;
+
+            const payload = {
+                "CLI": id,
+                "DATA": dataISO,
+                "VALOR": valor
+            };
+
+            console.log('Payload preparado:', payload);
+
+            try {
+                // Força o uso do endpoint absoluto
+                const url = `${API_BASE_URL}/dizimo`;
+                console.log('Chamando API POST:', url);
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                console.log('Resposta da API recebida. Status:', response.status);
+
+                if (response.status === 200 || response.ok) {
+                    const modal = document.getElementById('modalSuccessGeneric');
+                    document.getElementById('successTitle').textContent = 'Lançamento Concluído!';
+                    document.getElementById('successMessage').textContent = 'O dízimo foi registrado com sucesso no sistema.';
+                    modal.classList.add('active');
+                    
+                    document.getElementById('titValor').value = "0,00";
+                } else {
+                    const errText = await response.text();
+                    alert(`Erro do Servidor (Status ${response.status}): ${errText || 'Erro desconhecido'}`);
+                }
+            } catch (error) {
+                console.error('Erro de conexão total:', error);
+                alert('Não foi possível conectar à API. Verifique se o servidor está ativo em ' + API_BASE_URL);
+            }
+        });
+
+        // Fecha modal e volta para pesquisa
+        btnModalClose.addEventListener('click', () => {
+            modalOverlay.classList.remove('active');
+            switchView('pesquisa');
+        });
+    </script>
+</body>
+</html>
