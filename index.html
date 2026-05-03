@@ -51,11 +51,32 @@
 
                 <footer class="form-footer">
                     <p>Não tem uma conta? <a href="register.html">Cadastre-se</a></p>
+                    <p style="margin-top: 1rem;"><a href="#" id="generateQRCode" class="qr-link"><i class="ph ph-qr-code"></i> Acesso Mobile (QR Code)</a></p>
                 </footer>
             </form>
         </div>
     </main>
 
+    <!-- Modal QR Code -->
+    <div id="qrModal" class="qr-modal">
+        <div class="qr-content">
+            <header class="qr-header">
+                <i class="ph ph-qr-code"></i>
+                <h3>Acesso Rápido</h3>
+                <p>Aponte a câmera do celular para acessar o sistema</p>
+            </header>
+            
+            <div id="qrcode" class="qrcode-container"></div>
+            
+            <button id="closeQR" class="login-button secondary">
+                <i class="ph ph-arrow-left"></i>
+                Voltar ao Login
+            </button>
+        </div>
+    </div>
+
+    <!-- Bibliotecas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="config.js"></script>
     <script src="script.js"></script>
 </body>

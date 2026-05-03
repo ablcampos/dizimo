@@ -98,6 +98,45 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- Lógica do QR Code ---
+    const generateQRCodeBtn = document.getElementById('generateQRCode');
+    const qrModal = document.getElementById('qrModal');
+    const closeQRBtn = document.getElementById('closeQR');
+    const qrcodeContainer = document.getElementById('qrcode');
+    let qrCodeGenerated = false;
+
+    generateQRCodeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        qrModal.classList.add('active');
+
+        if (!qrCodeGenerated) {
+            // Limpa o container caso tenha algo
+            qrcodeContainer.innerHTML = '';
+            
+            // Gera o QR Code apontando para o seu GitHub Pages
+            new QRCode(qrcodeContainer, {
+                text: "https://ablcampos.github.io/dizimo/index.html",
+                width: 200,
+                height: 200,
+                colorDark: "#0f172a",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            qrCodeGenerated = true;
+        }
+    });
+
+    closeQRBtn.addEventListener('click', () => {
+        qrModal.classList.remove('active');
+    });
+
+    // Fechar ao clicar fora do conteúdo
+    qrModal.addEventListener('click', (e) => {
+        if (e.target === qrModal) {
+            qrModal.classList.remove('active');
+        }
+    });
+
     function showError(message) {
         errorMessage.textContent = message;
         errorMessage.classList.add('visible');
