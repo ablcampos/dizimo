@@ -760,6 +760,74 @@
                 font-size: 10px;
             }
         }
+
+        /* Report Specific Styles */
+        .month-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .month-badge {
+            background: #f1f5f9;
+            color: var(--primary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            border: 1px solid var(--border);
+            text-transform: uppercase;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 1.5cm;
+            }
+            body {
+                margin: 0;
+                background-color: white !important;
+            }
+            body * {
+                visibility: hidden;
+            }
+            #sectionRelatorioDizimistas, #sectionRelatorioDizimistas * {
+                visibility: visible;
+            }
+            #sectionRelatorioDizimistas {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+            .results-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .results-table thead {
+                display: table-header-group;
+            }
+            .results-table tr {
+                page-break-inside: avoid;
+            }
+            .sidebar, .menu-toggle, .header-actions, .form-actions, .report-controls {
+                display: none !important;
+            }
+            .results-container {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+            .results-table {
+                margin-top: 0 !important;
+            }
+            .month-badge {
+                border: 1px solid #ccc !important;
+                background: white !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -816,6 +884,7 @@
             <li><a href="#" id="btnViewLiberar"><i class="ph ph-user-check"></i> Liberar Usuário</a></li>
             <li><a href="#" id="btnViewCadastrar"><i class="ph ph-user-plus"></i> Cadastrar Dizimista</a></li>
             <li><a href="#" id="btnViewGerente"><i class="ph ph-shield-check"></i> Acesso Gerente</a></li>
+            <li><a href="#" id="btnViewRelatorio"><i class="ph ph-file-text"></i> Relatório dos Dizimistas</a></li>
             <li style="margin-top: 32px; border-top: 1px solid var(--border); padding-top: 16px;">
                 <a href="index.html" style="color: var(--error);">
                     <i class="ph ph-sign-out"></i> Sair do Sistema
@@ -994,6 +1063,32 @@
                 </div>
             </section>
         </div>
+        <!-- View: Relatório dos Dizimistas -->
+        <div id="sectionRelatorioDizimistas" class="view-section">
+            <section class="results-container">
+                <div class="results-header">Relatório Anual de Dizimistas</div>
+                
+                <div class="report-controls" style="margin-bottom: 24px; display: flex; gap: 16px; align-items: flex-end; background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
+                    <div class="input-group" style="flex: 1; max-width: 200px;">
+                        <label for="relatorioAno" style="font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; display: block;">ANO BASE</label>
+                        <input type="number" id="relatorioAno" value="" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
+                    </div>
+                    <button class="btn-new-search" onclick="switchView('pesquisa')" style="margin: 0;">
+                        <i class="ph ph-arrow-left"></i> Voltar
+                    </button>
+                    <button class="modal-btn" onclick="gerarRelatorioDizimistas()" style="width: auto; padding: 12px 24px; margin: 0;">
+                        <i class="ph ph-printer"></i> Relatório
+                    </button>
+                </div>
+
+                <div id="relatorioTableContainer">
+                    <div class="empty-state">
+                        <i class="ph ph-file-text"></i>
+                        <p>Informe o ano e clique em Relatório para gerar os dados.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
     <script src="config.js"></script>
     <script>
@@ -1011,6 +1106,8 @@
         const btnModalClose = document.getElementById('btnModalClose');
         const btnViewCadastrar = document.getElementById('btnViewCadastrar');
         const btnViewGerente = document.getElementById('btnViewGerente');
+        const btnViewRelatorio = document.getElementById('btnViewRelatorio');
+        const sectionRelatorioDizimistas = document.getElementById('sectionRelatorioDizimistas');
 
         // VARIÁVEL GLOBAL PARA O NOME E PERFIL
         window.NOME_USUARIO = new URLSearchParams(window.location.search).get('usuario') || 'VISITANTE';
@@ -1062,6 +1159,7 @@
             sectionCadastrar.classList.remove('active');
             sectionAcessoGerente.classList.remove('active');
             sectionLancarDizimo.classList.remove('active');
+            sectionRelatorioDizimistas.classList.remove('active');
             
             if (view === 'pesquisa') {
                 sectionPesquisa.classList.add('active');
@@ -1086,6 +1184,10 @@
             } else if (view === 'lancar') {
                 sectionLancarDizimo.classList.add('active');
                 headerTitle.textContent = 'Lançar Dízimo';
+            } else if (view === 'relatorio') {
+                sectionRelatorioDizimistas.classList.add('active');
+                headerTitle.textContent = 'Relatório de Dizimistas';
+                document.getElementById('relatorioAno').value = new Date().getFullYear();
             }
             if (sidebar.classList.contains('active')) toggleSidebar();
         }
@@ -1151,6 +1253,102 @@
             
             switchView('gerente');
         });
+
+        btnViewRelatorio.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Verifica se o usuário tem permissão
+            if (window.USER_PROFILE !== 'GERENTE') {
+                const modal = document.getElementById('modalAccessDenied');
+                const msg = document.getElementById('accessDeniedMessage');
+                msg.innerHTML = `Desculpe, <strong>${window.NOME_USUARIO}</strong>. <br> Esta funcionalidade é exclusiva para usuários com perfil <strong>GERENTE</strong>.`;
+                modal.classList.add('active');
+                switchView('pesquisa');
+                return;
+            }
+            
+            switchView('relatorio');
+        });
+
+        async function gerarRelatorioDizimistas() {
+            const ano = document.getElementById('relatorioAno').value;
+            const container = document.getElementById('relatorioTableContainer');
+            
+            if (!ano) {
+                alert('Por favor, informe o ano.');
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="ph ph-circle-notch ph-spin"></i>
+                    <p>Gerando relatório para o ano ${ano}...</p>
+                </div>
+            `;
+
+            const query = `SELECT C.IDCOLAB AS CLI, C.NOME, ` +
+                        `LIST(CASE EXTRACT(MONTH FROM DATA) ` +
+                        `WHEN 1 THEN 'JAN' WHEN 2 THEN 'FEV' WHEN 3 THEN 'MAR' WHEN 4 THEN 'ABR' ` +
+                        `WHEN 5 THEN 'MAI' WHEN 6 THEN 'JUN' WHEN 7 THEN 'JUL' WHEN 8 THEN 'AGO' ` +
+                        `WHEN 9 THEN 'SET' WHEN 10 THEN 'OUT' WHEN 11 THEN 'NOV' WHEN 12 THEN 'DEZ' ` +
+                        `END , '    ') AS MESES ` +
+                        `FROM COLABORADORES C ,DIZIMO D ` +
+                        `WHERE D.CLI = C.IDCOLAB AND EXTRACT(YEAR FROM D.DATA) = ${ano} ` +
+                        `GROUP BY C.IDCOLAB, C.NOME ORDER BY C.NOME`;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/config_txt/${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                if (data && data.length > 0) {
+                    container.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="color: var(--text-muted); font-size: 14px; text-transform: uppercase;">Relatório Consolidado - Ano ${ano}</h3>
+                            <button class="btn-edit" onclick="window.print()" style="background: var(--primary);">
+                                <i class="ph ph-printer"></i> Imprimir / PDF
+                            </button>
+                        </div>
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 80px;">Código</th>
+                                    <th>Nome</th>
+                                    <th>Meses de Contribuição</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.map(item => `
+                                    <tr>
+                                        <td><span class="idsenha-badge" style="background: var(--primary);">${item.cli}</span></td>
+                                        <td><span class="colab-name">${item.nome}</span></td>
+                                        <td>
+                                            <div class="month-grid">
+                                                ${(item.meses || '').split('    ').filter(m => m.trim()).map(m => `<span class="month-badge">${m}</span>`).join('')}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="ph ph-warning-circle"></i>
+                            <p>Nenhum dado encontrado para o ano ${ano}.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Erro ao gerar relatório:', error);
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="ph ph-warning-circle" style="color: var(--error)"></i>
+                        <p style="color: var(--error)">Erro ao conectar com a API.</p>
+                    </div>
+                `;
+            }
+        }
 
         // Uppercase conversion and date mask for all registration inputs
         const regForm = document.getElementById('formCadastrarDizimista');
