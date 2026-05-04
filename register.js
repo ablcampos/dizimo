@@ -126,7 +126,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Input effects and uppercase conversion
     [nomeInput, senhaInput, confirmarSenhaInput].forEach(input => {
         input.addEventListener('input', () => {
-            input.value = input.value.toUpperCase();
+            let val = input.value.toUpperCase();
+            // Normaliza para remover acentos e troca aspas por espaço
+            val = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            val = val.replace(/'/g, " ");
+            input.value = val;
         });
 
         input.addEventListener('focus', () => {

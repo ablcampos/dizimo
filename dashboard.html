@@ -1357,7 +1357,11 @@
         regForm.querySelectorAll('input').forEach(input => {
             input.addEventListener('input', () => {
                 if (input.id !== 'regNascimento') {
-                    input.value = input.value.toUpperCase();
+                    let val = input.value.toUpperCase();
+                    // Normaliza para remover acentos e troca aspas por espaço
+                    val = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    val = val.replace(/'/g, " ");
+                    input.value = val;
                 }
             });
         });
@@ -1548,7 +1552,11 @@
 
         // Uppercase conversion for search (consistency)
         searchInput.addEventListener('input', () => {
-            searchInput.value = searchInput.value.toUpperCase();
+            let val = searchInput.value.toUpperCase();
+            // Normaliza para remover acentos e troca aspas por espaço
+            val = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            val = val.replace(/'/g, " ");
+            searchInput.value = val;
         });
         // Foca no campo de pesquisa ao abrir a página
         searchInput.focus();
