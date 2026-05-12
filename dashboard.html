@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dízimo | Gestão dos Dizimistas</title>
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    
+
     <style>
         :root {
             --primary: #4f46e5;
@@ -54,7 +55,7 @@
             transition: var(--transition);
             display: flex;
             flex-direction: column;
-            box-shadow: 10px 0 30px rgba(0,0,0,0.05);
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.05);
         }
 
         .sidebar.active {
@@ -347,7 +348,7 @@
             font-size: 14px;
             text-transform: uppercase;
         }
-       
+
         .btn-liberar {
             background: var(--success);
             color: white;
@@ -438,8 +439,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Modal Styles */
@@ -519,29 +527,49 @@
         }
 
         @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         @media (max-width: 640px) {
             .main-content {
                 padding: 20px 16px;
             }
+
             .results-container {
                 padding: 16px;
             }
+
             .search-container {
                 flex-direction: column;
             }
+
             .btn-search {
                 padding: 16px;
             }
         }
 
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-10px);
+            }
+
+            75% {
+                transform: translateX(10px);
+            }
         }
 
         /* Detail View Styles */
@@ -602,22 +630,26 @@
             flex-direction: column;
             gap: 24px;
         }
+
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
         }
+
         .registration-form .input-group {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
+
         .registration-form label {
             font-size: 13px;
             font-weight: 600;
             color: var(--text-muted);
             text-transform: uppercase;
         }
+
         .registration-form input {
             padding: 12px 16px;
             border-radius: 10px;
@@ -626,12 +658,14 @@
             font-size: 14px;
             transition: var(--transition);
         }
+
         .registration-form input:focus {
             outline: none;
             border-color: var(--primary);
             background: #fff;
             box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
         }
+
         .form-actions {
             display: flex;
             justify-content: flex-end;
@@ -665,20 +699,22 @@
                 display: block;
                 border: none;
                 padding: 6px 12px;
-                font-size: 12px; /* Redução de 15% */
+                font-size: 12px;
+                /* Redução de 15% */
             }
 
             /* Consulta de Dizimistas: ID minúsculo e Nome com espaço máximo */
-            #sectionPesquisa .results-table td:nth-child(1) { 
-                flex: 0 0 45px; 
-                padding-right: 0; 
+            #sectionPesquisa .results-table td:nth-child(1) {
+                flex: 0 0 45px;
+                padding-right: 0;
             }
-            #sectionPesquisa .results-table td:nth-child(2) { 
-                flex: 1; 
-                font-weight: 700; 
+
+            #sectionPesquisa .results-table td:nth-child(2) {
+                flex: 1;
+                font-weight: 700;
                 padding-left: 0;
             }
-            
+
             /* Ações para a segunda linha */
             #sectionPesquisa .results-table td:nth-child(3) {
                 flex: 1 0 100%;
@@ -696,16 +732,19 @@
 
         @media (max-width: 542px) {
             .results-table td {
-                font-size: 10px; /* Redução de aproximadamente 30% */
+                font-size: 10px;
+                /* Redução de aproximadamente 30% */
             }
 
             /* Redução de títulos e cabeçalhos */
             .header-title h1 {
                 font-size: 18px;
             }
+
             .results-header {
                 font-size: 10px;
             }
+
             .user-welcome {
                 font-size: 11px;
             }
@@ -718,18 +757,20 @@
                 padding: 12px 0;
             }
 
-            #sectionLiberar .results-table td:nth-child(1) { 
-                flex: 0 0 45px; 
-                padding-right: 0; 
+            #sectionLiberar .results-table td:nth-child(1) {
+                flex: 0 0 45px;
+                padding-right: 0;
             }
-            #sectionLiberar .results-table td:nth-child(2) { 
-                flex: 1; 
-                font-weight: 700; 
+
+            #sectionLiberar .results-table td:nth-child(2) {
+                flex: 1;
+                font-weight: 700;
                 padding-left: 0;
             }
-            #sectionLiberar .results-table td:nth-child(3) { 
-                flex: 0 0 70px; 
-                text-align: right; 
+
+            #sectionLiberar .results-table td:nth-child(3) {
+                flex: 0 0 70px;
+                text-align: right;
                 padding-left: 0;
             }
 
@@ -750,13 +791,15 @@
             }
 
             /* Ajuste de escala para elementos internos */
-            #sectionLiberar .btn-liberar, 
+            #sectionLiberar .btn-liberar,
             #sectionLiberar .btn-edit,
             #sectionLiberar .idsenha-badge {
                 font-size: 9px;
                 padding: 4px 8px;
             }
-            #sectionLiberar .btn-liberar i, #sectionLiberar .btn-edit i {
+
+            #sectionLiberar .btn-liberar i,
+            #sectionLiberar .btn-edit i {
                 font-size: 10px;
             }
         }
@@ -784,16 +827,21 @@
                 size: A4;
                 margin: 1.5cm;
             }
+
             body {
                 margin: 0;
                 background-color: white !important;
             }
+
             body * {
                 visibility: hidden;
             }
-            #sectionRelatorioDizimistas, #sectionRelatorioDizimistas * {
+
+            #sectionRelatorioDizimistas,
+            #sectionRelatorioDizimistas * {
                 visibility: visible;
             }
+
             #sectionRelatorioDizimistas {
                 position: absolute;
                 left: 0;
@@ -802,27 +850,38 @@
                 padding: 0;
                 margin: 0;
             }
+
             .results-table {
                 width: 100%;
                 border-collapse: collapse;
             }
+
             .results-table thead {
                 display: table-header-group;
             }
+
             .results-table tr {
                 page-break-inside: avoid;
             }
-            .sidebar, .menu-toggle, .header-actions, .form-actions, .report-controls {
+
+            .sidebar,
+            .menu-toggle,
+            .header-actions,
+            .form-actions,
+            .report-controls {
                 display: none !important;
             }
+
             .results-container {
                 box-shadow: none !important;
                 border: none !important;
                 padding: 0 !important;
             }
+
             .results-table {
                 margin-top: 0 !important;
             }
+
             .month-badge {
                 border: 1px solid #ccc !important;
                 background: white !important;
@@ -830,6 +889,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Sidebar Menu -->
     <div class="overlay" id="overlay"></div>
@@ -839,7 +899,8 @@
         <div class="modal">
             <i class="ph ph-check-circle modal-icon"></i>
             <h2>Liberação Concluída!</h2>
-            <p>O usuário foi liberado com sucesso e já tem permissão para acessar todas as funcionalidades do sistema.</p>
+            <p>O usuário foi liberado com sucesso e já tem permissão para acessar todas as funcionalidades do sistema.
+            </p>
             <button class="modal-btn" id="btnModalClose">Retornar à Pesquisa</button>
         </div>
     </div>
@@ -847,10 +908,13 @@
     <!-- Modal de Acesso Negado -->
     <div class="modal-overlay" id="modalAccessDenied">
         <div class="modal">
-            <i class="ph ph-lock-keyhole modal-icon" style="color: var(--error); animation: shake 0.5s ease-in-out;"></i>
+            <i class="ph ph-lock-keyhole modal-icon"
+                style="color: var(--error); animation: shake 0.5s ease-in-out;"></i>
             <h2 style="color: var(--text-main);">Acesso Restrito</h2>
-            <p id="accessDeniedMessage">Esta funcionalidade é exclusiva para usuários com perfil <strong>GERENTE</strong>.</p>
-            <button class="modal-btn" style="background: var(--text-main);" onclick="document.getElementById('modalAccessDenied').classList.remove('active')">Entendido</button>
+            <p id="accessDeniedMessage">Esta funcionalidade é exclusiva para usuários com perfil
+                <strong>GERENTE</strong>.</p>
+            <button class="modal-btn" style="background: var(--text-main);"
+                onclick="document.getElementById('modalAccessDenied').classList.remove('active')">Entendido</button>
         </div>
     </div>
 
@@ -860,17 +924,20 @@
             <i class="ph ph-check-circle modal-icon" style="color: var(--success); animation: bounce 2s infinite;"></i>
             <h2 id="successTitle">Sucesso!</h2>
             <p id="successMessage">Operação realizada com êxito.</p>
-            <button class="modal-btn" onclick="document.getElementById('modalSuccessGeneric').classList.remove('active'); switchView('pesquisa');">Entendido</button>
+            <button class="modal-btn"
+                onclick="document.getElementById('modalSuccessGeneric').classList.remove('active'); switchView('pesquisa');">Entendido</button>
         </div>
     </div>
 
     <!-- Modal de Aviso (Campos Obrigatórios) -->
     <div class="modal-overlay" id="modalWarning">
         <div class="modal">
-            <i class="ph ph-warning-circle modal-icon" style="color: var(--warning); animation: shake 0.5s ease-in-out;"></i>
+            <i class="ph ph-warning-circle modal-icon"
+                style="color: var(--warning); animation: shake 0.5s ease-in-out;"></i>
             <h2 style="color: var(--text-main);">Informação Necessária</h2>
             <p id="warningMessage">Por favor, preencha todos os campos obrigatórios para continuar.</p>
-            <button class="modal-btn" style="background: var(--warning);" onclick="document.getElementById('modalWarning').classList.remove('active')">Revisar Cadastro</button>
+            <button class="modal-btn" style="background: var(--warning);"
+                onclick="document.getElementById('modalWarning').classList.remove('active')">Revisar Cadastro</button>
         </div>
     </div>
 
@@ -902,7 +969,9 @@
             <div class="header-title">
                 <h1>Painel de Controle</h1>
                 <div class="user-welcome" id="userWelcome">BEM-VINDO, USUÁRIO</div>
-                <div class="user-welcome" id="totalDizimistas" style="margin-top: 4px; font-weight: 600; color: var(--primary);">Buscando total de dizimistas...</div>
+                <div class="user-welcome" id="totalDizimistas"
+                    style="margin-top: 4px; font-weight: 600; color: var(--primary);">Buscando total de dizimistas...
+                </div>
             </div>
             <div class="header-actions">
                 <a href="index.html" class="btn-logout-header" id="btnLogout">
@@ -1000,7 +1069,8 @@
                             <input type="text" id="regReferencia" maxlength="50">
                         </div>
                         <div class="input-group">
-                            <label for="regNascimento">Data de Nascimento (DD/MM/AAAA) <span class="required-asterisk">*</span></label>
+                            <label for="regNascimento">Data de Nascimento (DD/MM/AAAA) <span
+                                    class="required-asterisk">*</span></label>
                             <input type="text" id="regNascimento" placeholder="00/00/0000" maxlength="10">
                         </div>
                     </div>
@@ -1019,31 +1089,43 @@
         <div id="sectionLancarDizimo" class="view-section">
             <section class="results-container">
                 <div class="results-header">Lançamento de Dízimo</div>
-                <div class="detail-card" style="max-width: 600px; margin: 0 auto; border-top: 4px solid var(--success);">
+                <div class="detail-card"
+                    style="max-width: 600px; margin: 0 auto; border-top: 4px solid var(--success);">
                     <div style="text-align: center; margin-bottom: 32px;">
-                        <div style="width: 64px; height: 64px; background: rgba(34, 197, 94, 0.1); color: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                        <div
+                            style="width: 64px; height: 64px; background: rgba(34, 197, 94, 0.1); color: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
                             <i class="ph ph-currency-dollar" style="font-size: 32px;"></i>
                         </div>
-                        <h2 id="lancarDizimoNome" style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 4px;">NOME DO DIZIMISTA</h2>
-                        <p style="color: var(--text-muted); font-size: 0.9rem;">ID: <span id="lancarDizimoID">0000</span></p>
+                        <h2 id="lancarDizimoNome"
+                            style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 4px;">NOME DO DIZIMISTA
+                        </h2>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">ID: <span
+                                id="lancarDizimoID">0000</span></p>
                     </div>
-                    
+
                     <form id="formLancarDizimo" class="registration-form" novalidate>
                         <div class="form-grid">
                             <div class="input-group">
-                                <label for="titData" style="font-weight: 600; color: var(--text-muted); margin-bottom: 8px; display: block;">Data do Dízimo</label>
-                                <input type="text" id="titData" maxlength="10" placeholder="00/00/0000" required style="font-size: 16px; height: 48px; width: 100%;">
+                                <label for="titData"
+                                    style="font-weight: 600; color: var(--text-muted); margin-bottom: 8px; display: block;">Data
+                                    do Dízimo</label>
+                                <input type="text" id="titData" maxlength="10" placeholder="00/00/0000" required
+                                    style="font-size: 16px; height: 48px; width: 100%;">
                             </div>
                             <div class="input-group">
-                                <label for="titValor" style="font-weight: 600; color: var(--text-muted); margin-bottom: 8px; display: block;">Valor</label>
-                                <input type="text" id="titValor" value="0,00" required style="font-weight: 700; color: var(--success); font-size: 16px; height: 48px; border-color: var(--success); width: 100%;">
+                                <label for="titValor"
+                                    style="font-weight: 600; color: var(--text-muted); margin-bottom: 8px; display: block;">Valor</label>
+                                <input type="text" id="titValor" value="0,00" required
+                                    style="font-weight: 700; color: var(--success); font-size: 16px; height: 48px; border-color: var(--success); width: 100%;">
                             </div>
                         </div>
                         <div class="form-actions" style="margin-top: 32px;">
-                            <button type="button" class="btn-new-search" onclick="switchView('pesquisa')" style="background: var(--primary); border: none; height: 48px; padding: 0 32px; font-weight: 600; color: white; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);">
+                            <button type="button" class="btn-new-search" onclick="switchView('pesquisa')"
+                                style="background: var(--primary); border: none; height: 48px; padding: 0 32px; font-weight: 600; color: white; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);">
                                 <i class="ph ph-arrow-left" style="color: white;"></i> Retornar
                             </button>
-                            <button type="submit" class="modal-btn" style="width: auto; height: 48px; padding: 0 40px; background: var(--success); border: none; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); font-weight: 600; color: white;">
+                            <button type="submit" class="modal-btn"
+                                style="width: auto; height: 48px; padding: 0 40px; background: var(--success); border: none; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); font-weight: 600; color: white;">
                                 <i class="ph ph-floppy-disk" style="color: white;"></i> Gravar Lançamento
                             </button>
                         </div>
@@ -1068,16 +1150,21 @@
         <div id="sectionRelatorioDizimistas" class="view-section">
             <section class="results-container">
                 <div class="results-header">Relatório Anual de Dizimistas</div>
-                
-                <div class="report-controls" style="margin-bottom: 24px; display: flex; gap: 16px; align-items: flex-end; background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
+
+                <div class="report-controls"
+                    style="margin-bottom: 24px; display: flex; gap: 16px; align-items: flex-end; background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
                     <div class="input-group" style="flex: 1; max-width: 200px;">
-                        <label for="relatorioAno" style="font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; display: block;">ANO BASE</label>
-                        <input type="number" id="relatorioAno" value="" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
+                        <label for="relatorioAno"
+                            style="font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; display: block;">ANO
+                            BASE</label>
+                        <input type="number" id="relatorioAno" value=""
+                            style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
                     </div>
                     <button class="btn-new-search" onclick="switchView('pesquisa')" style="margin: 0;">
                         <i class="ph ph-arrow-left"></i> Voltar
                     </button>
-                    <button class="modal-btn" onclick="gerarRelatorioDizimistas()" style="width: auto; padding: 12px 24px; margin: 0;">
+                    <button class="modal-btn" onclick="gerarRelatorioDizimistas()"
+                        style="width: auto; padding: 12px 24px; margin: 0;">
                         <i class="ph ph-printer"></i> Relatório
                     </button>
                 </div>
@@ -1112,11 +1199,11 @@
 
         // VARIÁVEL GLOBAL PARA O NOME E PERFIL
         window.NOME_USUARIO = new URLSearchParams(window.location.search).get('usuario') || 'VISITANTE';
-        window.USER_PROFILE = (sessionStorage.getItem('userProfile') || '').toUpperCase(); 
+        window.USER_PROFILE = (sessionStorage.getItem('userProfile') || '').toUpperCase();
 
         // EXIBE O NOME NA TELA E BUSCA O PERFIL SE NÃO EXISTIR
         userWelcome.textContent = `BEM-VINDO, ${window.NOME_USUARIO.toUpperCase()}`;
-        
+
         async function buscarPerfilUsuario() {
             // Se já temos o perfil do login, não precisamos buscar de novo
             if (window.USER_PROFILE) {
@@ -1147,23 +1234,23 @@
                 const query = "select count(*) as TOTAL from colaboradores where ativo='S'";
                 const response = await fetch(`${API_BASE_URL}/config_txt/${encodeURIComponent(query)}`);
                 const data = await response.json();
-                
+
                 if (data && data.length > 0) {
                     const firstItem = data[0];
                     let total;
-                    
+
                     if (typeof firstItem === 'object' && firstItem !== null) {
                         // Tenta buscar por chaves conhecidas ou pega o primeiro valor
-                        total = firstItem.TOTAL !== undefined ? firstItem.TOTAL : 
-                                (firstItem.total !== undefined ? firstItem.total : Object.values(firstItem)[0]);
+                        total = firstItem.TOTAL !== undefined ? firstItem.TOTAL :
+                            (firstItem.total !== undefined ? firstItem.total : Object.values(firstItem)[0]);
                     } else {
                         // Caso a API retorne um array de primitivos [150]
                         total = firstItem;
                     }
-                    
-                    elTotal.textContent = `TOTAL DE DIZIMISTAS ATIVOS: ${total}`;
+
+                    elTotal.textContent = `Total de Dizimistas Ativos:   ${total}`;
                 } else {
-                    elTotal.textContent = 'TOTAL DE DIZIMISTAS ATIVOS: 0';
+                    elTotal.textContent = 'Total de Dizimistas Ativos:  0';
                 }
             } catch (error) {
                 console.error('Erro ao buscar total de dizimistas:', error);
@@ -1193,7 +1280,7 @@
             sectionAcessoGerente.classList.remove('active');
             sectionLancarDizimo.classList.remove('active');
             sectionRelatorioDizimistas.classList.remove('active');
-            
+
             if (view === 'pesquisa') {
                 sectionPesquisa.classList.add('active');
                 headerTitle.textContent = 'Pesquisar Dizimistas';
@@ -1241,7 +1328,7 @@
 
         btnViewLiberar.addEventListener('click', (e) => {
             e.preventDefault();
-            
+
             // Verifica se o usuário tem permissão
             if (window.USER_PROFILE !== 'GERENTE') {
                 const modal = document.getElementById('modalAccessDenied');
@@ -1251,13 +1338,13 @@
                 switchView('pesquisa');
                 return;
             }
-            
+
             switchView('liberar');
         });
 
         btnViewCadastrar.addEventListener('click', (e) => {
             e.preventDefault();
-            
+
             // Verifica se o usuário tem permissão
             if (window.USER_PROFILE !== 'GERENTE') {
                 const modal = document.getElementById('modalAccessDenied');
@@ -1267,13 +1354,13 @@
                 switchView('pesquisa');
                 return;
             }
-            
+
             switchView('cadastrar');
         });
 
         btnViewGerente.addEventListener('click', (e) => {
             e.preventDefault();
-            
+
             // Verifica se o usuário tem permissão
             if (window.USER_PROFILE !== 'GERENTE') {
                 const modal = document.getElementById('modalAccessDenied');
@@ -1283,13 +1370,13 @@
                 switchView('pesquisa');
                 return;
             }
-            
+
             switchView('gerente');
         });
 
         btnViewRelatorio.addEventListener('click', (e) => {
             e.preventDefault();
-            
+
             // Verifica se o usuário tem permissão
             if (window.USER_PROFILE !== 'GERENTE') {
                 const modal = document.getElementById('modalAccessDenied');
@@ -1299,14 +1386,14 @@
                 switchView('pesquisa');
                 return;
             }
-            
+
             switchView('relatorio');
         });
 
         async function gerarRelatorioDizimistas() {
             const ano = document.getElementById('relatorioAno').value;
             const container = document.getElementById('relatorioTableContainer');
-            
+
             if (!ano) {
                 alert('Por favor, informe o ano.');
                 return;
@@ -1320,14 +1407,14 @@
             `;
 
             const query = `SELECT C.IDCOLAB AS CLI, C.NOME, ` +
-                        `LIST(CASE EXTRACT(MONTH FROM DATA) ` +
-                        `WHEN 1 THEN 'JAN' WHEN 2 THEN 'FEV' WHEN 3 THEN 'MAR' WHEN 4 THEN 'ABR' ` +
-                        `WHEN 5 THEN 'MAI' WHEN 6 THEN 'JUN' WHEN 7 THEN 'JUL' WHEN 8 THEN 'AGO' ` +
-                        `WHEN 9 THEN 'SET' WHEN 10 THEN 'OUT' WHEN 11 THEN 'NOV' WHEN 12 THEN 'DEZ' ` +
-                        `END , '    ') AS MESES ` +
-                        `FROM COLABORADORES C ,DIZIMO D ` +
-                        `WHERE D.CLI = C.IDCOLAB AND EXTRACT(YEAR FROM D.DATA) = ${ano} ` +
-                        `GROUP BY C.IDCOLAB, C.NOME ORDER BY C.NOME`;
+                `LIST(CASE EXTRACT(MONTH FROM DATA) ` +
+                `WHEN 1 THEN 'JAN' WHEN 2 THEN 'FEV' WHEN 3 THEN 'MAR' WHEN 4 THEN 'ABR' ` +
+                `WHEN 5 THEN 'MAI' WHEN 6 THEN 'JUN' WHEN 7 THEN 'JUL' WHEN 8 THEN 'AGO' ` +
+                `WHEN 9 THEN 'SET' WHEN 10 THEN 'OUT' WHEN 11 THEN 'NOV' WHEN 12 THEN 'DEZ' ` +
+                `END , '    ') AS MESES ` +
+                `FROM COLABORADORES C ,DIZIMO D ` +
+                `WHERE D.CLI = C.IDCOLAB AND EXTRACT(YEAR FROM D.DATA) = ${ano} ` +
+                `GROUP BY C.IDCOLAB, C.NOME ORDER BY C.NOME`;
 
             try {
                 const response = await fetch(`${API_BASE_URL}/config_txt/${encodeURIComponent(query)}`);
@@ -1403,7 +1490,7 @@
         inputNascimento.addEventListener('input', (e) => {
             let v = e.target.value.replace(/\D/g, '');
             if (v.length > 8) v = v.substring(0, 8);
-            
+
             if (v.length > 4) {
                 v = v.replace(/^(\d{2})(\d{2})(\d{0,4}).*/, '$1/$2/$3');
             } else if (v.length > 2) {
@@ -1422,7 +1509,7 @@
 
         regForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const nome = document.getElementById('regNome').value.trim();
             const dataNasc = inputNascimento.value.trim();
 
@@ -1434,7 +1521,7 @@
                 modal.classList.add('active');
                 return;
             }
-            
+
             if (dataNasc && !validarData(dataNasc)) {
                 const modal = document.getElementById('modalWarning');
                 const msg = document.getElementById('warningMessage');
@@ -1468,7 +1555,7 @@
             };
 
             console.log('Enviando JSON:', JSON.stringify(payload));
-            
+
             try {
                 const response = await fetch(`${API_BASE_URL}/colaborador`, {
                     method: 'POST',
@@ -1478,13 +1565,13 @@
                     },
                     body: JSON.stringify(payload)
                 });
-                
+
                 if (response.ok) {
                     const modal = document.getElementById('modalSuccessGeneric');
                     document.getElementById('successTitle').textContent = 'Cadastro Realizado!';
                     document.getElementById('successMessage').innerHTML = `O dizimista <strong>${payload.NOME}</strong> foi cadastrado com sucesso no sistema.`;
                     modal.classList.add('active');
-                    
+
                     resetFormCadastrar();
                 } else {
                     const errData = await response.json().catch(() => ({}));
@@ -1515,7 +1602,7 @@
             btnSearch.disabled = true;
             const originalIcon = btnSearch.innerHTML;
             btnSearch.innerHTML = '<i class="ph ph-circle-notch ph-spin"></i>';
-            
+
             emptyState.innerHTML = '<i class="ph ph-circle-notch ph-spin"></i><p>Pesquisando colaboradores...</p>';
             emptyState.style.display = 'flex';
             emptyState.style.flexDirection = 'column';
@@ -1533,7 +1620,7 @@
 
                 if (data && data.length > 0) {
                     emptyState.style.display = 'none';
-                    
+
                     const table = document.createElement('table');
                     table.className = 'results-table';
                     table.innerHTML = `
@@ -1596,7 +1683,7 @@
 
         async function carregarUsuariosNovos() {
             const container = document.getElementById('liberarTableContainer');
-            
+
             // Limpa a tabela anterior e mostra o estado de carregamento
             container.innerHTML = `
                 <div class="empty-state">
@@ -1604,7 +1691,7 @@
                     <p>Buscando usuários pendentes...</p>
                 </div>
             `;
-            
+
             try {
                 // Endpoint conforme solicitado pelo usuário
                 const query = "Select * from senha where perfil ='NOVO'";
@@ -1650,14 +1737,14 @@
         }
 
         // Funções para os botões de ação
-        window.liberarUsuario = async function(id) {
+        window.liberarUsuario = async function (id) {
             try {
                 // Endpoint de UPDATE conforme solicitado
                 const query = `update senha set perfil ='' where idsenha= ${id}`;
                 const response = await fetch(`${API_BASE_URL}/config_txt/${encodeURIComponent(query)}`, {
                     method: 'POST'
                 });
-                
+
                 if (response.ok) {
                     // Exibe o modal profissional
                     modalOverlay.classList.add('active');
@@ -1670,20 +1757,20 @@
             }
         }
 
-        window.visualizarRegistro = async function(id) {
+        window.visualizarRegistro = async function (id) {
             const currentYear = new Date().getFullYear();
-            
+
             // Query SQL formatada conforme solicitado
             const query = `SELECT C.IDCOLAB AS CLI, C.NOME, ` +
-                        `LIST(CASE EXTRACT(MONTH FROM DATA) ` +
-                        `WHEN 1 THEN 'JAN' WHEN 2 THEN 'FEV' WHEN 3 THEN 'MAR' WHEN 4 THEN 'ABR' ` +
-                        `WHEN 5 THEN 'MAI' WHEN 6 THEN 'JUN' WHEN 7 THEN 'JUL' WHEN 8 THEN 'AGO' ` +
-                        `WHEN 9 THEN 'SET' WHEN 10 THEN 'OUT' WHEN 11 THEN 'NOV' WHEN 12 THEN 'DEZ' ` +
-                        `END , '    ') AS MESES ` +
-                        `FROM COLABORADORES C ,DIZIMO D ` +
-                        `WHERE D.CLI = C.IDCOLAB AND EXTRACT(YEAR FROM D.DATA) = ${currentYear} ` +
-                        `AND C.IDCOLAB = ${id} ` +
-                        `GROUP BY C.IDCOLAB, C.NOME ORDER BY C.NOME`;
+                `LIST(CASE EXTRACT(MONTH FROM DATA) ` +
+                `WHEN 1 THEN 'JAN' WHEN 2 THEN 'FEV' WHEN 3 THEN 'MAR' WHEN 4 THEN 'ABR' ` +
+                `WHEN 5 THEN 'MAI' WHEN 6 THEN 'JUN' WHEN 7 THEN 'JUL' WHEN 8 THEN 'AGO' ` +
+                `WHEN 9 THEN 'SET' WHEN 10 THEN 'OUT' WHEN 11 THEN 'NOV' WHEN 12 THEN 'DEZ' ` +
+                `END , '    ') AS MESES ` +
+                `FROM COLABORADORES C ,DIZIMO D ` +
+                `WHERE D.CLI = C.IDCOLAB AND EXTRACT(YEAR FROM D.DATA) = ${currentYear} ` +
+                `AND C.IDCOLAB = ${id} ` +
+                `GROUP BY C.IDCOLAB, C.NOME ORDER BY C.NOME`;
 
             // Mostra carregamento
             detalhesContainer.innerHTML = `
@@ -1803,7 +1890,7 @@
                 const response = await fetch(`${API_BASE_URL}/config_txt/${encodeURIComponent(query)}`, {
                     method: 'POST'
                 });
-                
+
                 if (response.ok) {
                     const modal = document.getElementById('modalSuccessGeneric');
                     document.getElementById('successTitle').textContent = 'Perfil Atualizado!';
@@ -1819,11 +1906,11 @@
             }
         }
 
-        window.editarRegistro = function(id) {
+        window.editarRegistro = function (id) {
             alert('Abrindo edição para o ID: ' + id);
         }
 
-        window.lancarDizimo = function(id, nome) {
+        window.lancarDizimo = function (id, nome) {
             // Verifica se o usuário tem permissão
             if (window.USER_PROFILE !== 'GERENTE') {
                 const modal = document.getElementById('modalAccessDenied');
@@ -1837,17 +1924,17 @@
             const h2Nome = document.getElementById('lancarDizimoNome');
             spanID.textContent = id;
             h2Nome.textContent = nome;
-            
+
             // Preenche data atual DD/MM/AAAA
             const hoje = new Date();
             const d = String(hoje.getDate()).padStart(2, '0');
             const m = String(hoje.getMonth() + 1).padStart(2, '0');
             const a = hoje.getFullYear();
             document.getElementById('titData').value = `${d}/${m}/${a}`;
-            
+
             // Preenche valor 0
             document.getElementById('titValor').value = "0,00";
-            
+
             switchView('lancar');
         }
 
@@ -1876,7 +1963,7 @@
         formLancarDizimo.addEventListener('submit', async (e) => {
             e.preventDefault();
             console.log('Iniciando processo de gravação...');
-            
+
             const id = document.getElementById('lancarDizimoID').textContent;
             const dataStr = document.getElementById('titData').value;
             const valorFormatado = document.getElementById('titValor').value;
@@ -1912,7 +1999,7 @@
 
                 const response = await fetch(url, {
                     method: 'POST',
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     },
@@ -1926,7 +2013,7 @@
                     document.getElementById('successTitle').textContent = 'Lançamento Concluído!';
                     document.getElementById('successMessage').textContent = 'O dízimo foi registrado com sucesso no sistema.';
                     modal.classList.add('active');
-                    
+
                     document.getElementById('titValor').value = "0,00";
                 } else {
                     const errText = await response.text();
@@ -1945,4 +2032,5 @@
         });
     </script>
 </body>
+
 </html>
