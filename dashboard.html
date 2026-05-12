@@ -902,6 +902,7 @@
             <div class="header-title">
                 <h1>Painel de Controle</h1>
                 <div class="user-welcome" id="userWelcome">BEM-VINDO, USUÁRIO</div>
+                <div class="user-welcome" id="totalDizimistas" style="margin-top: 4px; font-weight: 600; color: var(--primary);">Buscando total de dizimistas...</div>
             </div>
             <div class="header-actions">
                 <a href="index.html" class="btn-logout-header" id="btnLogout">
@@ -1138,6 +1139,38 @@
             }
         }
         buscarPerfilUsuario();
+
+        async function carregarTotalDizimistas() {
+            const elTotal = document.getElementById('totalDizimistas');
+            try {
+                // Usando Alias para garantir consistência
+                const query = "select count(*) as TOTAL from colaboradores where ativo='S'";
+                const response = await fetch(`${API_BASE_URL}/config_txt/${encodeURIComponent(query)}`);
+                const data = await response.json();
+                
+                if (data && data.length > 0) {
+                    const firstItem = data[0];
+                    let total;
+                    
+                    if (typeof firstItem === 'object' && firstItem !== null) {
+                        // Tenta buscar por chaves conhecidas ou pega o primeiro valor
+                        total = firstItem.TOTAL !== undefined ? firstItem.TOTAL : 
+                                (firstItem.total !== undefined ? firstItem.total : Object.values(firstItem)[0]);
+                    } else {
+                        // Caso a API retorne um array de primitivos [150]
+                        total = firstItem;
+                    }
+                    
+                    elTotal.textContent = `TOTAL DE DIZIMISTAS ATIVOS: ${total}`;
+                } else {
+                    elTotal.textContent = 'TOTAL DE DIZIMISTAS ATIVOS: 0';
+                }
+            } catch (error) {
+                console.error('Erro ao buscar total de dizimistas:', error);
+                elTotal.textContent = 'ERRO AO CARREGAR TOTAL';
+            }
+        }
+        carregarTotalDizimistas();
 
         // View Management
         const btnViewPesquisa = document.getElementById('btnViewPesquisa');
