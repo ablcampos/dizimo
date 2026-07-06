@@ -647,7 +647,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-actions">
+                <div class="form-actions" style="display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap;">
+                    <button type="button" class="btn-submit" onclick="limparCamposCadastro()" style="background: #64748b;">
+                        <i class="ph ph-trash"></i> Limpar Cadastro
+                    </button>
                     <button type="submit" class="btn-submit">
                         <i class="ph ph-floppy-disk"></i> Gravar Cadastro
                     </button>
@@ -769,6 +772,16 @@
             document.getElementById('divCadastro').style.display = 'block';
             document.getElementById('inputPesquisaNome').value = '';
             document.getElementById('divCadastro').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function limparCamposCadastro() {
+            const regForm = document.getElementById('formCadastrarDizimista');
+            if (regForm) regForm.reset();
+            // Valores padrões restaurados
+            document.getElementById('regCidade').value = 'RIO BONITO';
+            document.getElementById('regUF').value = 'RJ';
+            document.getElementById('regReferencia').value = 'INTERNET';
+            document.getElementById('inputPesquisaNome').value = '';
         }
 
         // Lógica de Cadastro (mesma do dashboard)
@@ -919,6 +932,22 @@
             let isRecording = false;
             let valAnterior = '';
             let defaultPlaceholder = '';
+            let silenceTimer = null;
+
+            function startSilenceTimer(rec) {
+                clearSilenceTimer();
+                silenceTimer = setTimeout(() => {
+                    console.log('Silêncio detectado por 3s no campo de pesquisa. Desativando...');
+                    try { rec.abort(); } catch(err) {}
+                }, 3000);
+            }
+
+            function clearSilenceTimer() {
+                if (silenceTimer) {
+                    clearTimeout(silenceTimer);
+                    silenceTimer = null;
+                }
+            }
 
             function initRecognition() {
                 let rec = new SpeechRecognition();
@@ -933,9 +962,11 @@
                     if (valAnterior) valAnterior += ' ';
                     btnMic.classList.add('recording');
                     inputPesq.placeholder = 'Fale agora...';
+                    startSilenceTimer(rec);
                 };
 
                 rec.onresult = (event) => {
+                    startSilenceTimer(rec); // Reinicia o timer de silêncio a cada nova fala
                     let finalT = '';
                     let interimT = '';
                     for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -958,12 +989,14 @@
 
                 rec.onerror = (event) => {
                     console.error('Erro de voz:', event.error);
+                    clearSilenceTimer();
                 };
 
                 rec.onend = () => {
                     isRecording = false;
                     btnMic.classList.remove('recording');
                     inputPesq.placeholder = defaultPlaceholder;
+                    clearSilenceTimer();
                 };
 
                 return rec;
@@ -988,14 +1021,25 @@
                     } catch(err) {
                         console.error('Erro ao iniciar mic:', err);
                         mostrarAviso('Erro ao iniciar microfone. Verifique as permissões de gravação.');
-                    }
-                }
-            });
-        })();
-
         // ===== Reconhecimento de Voz Reutilizável para Formulário =====
         (function() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            let silenceTimer = null;
+
+            function startSilenceTimer(rec, inputId) {
+                clearSilenceTimer();
+                silenceTimer = setTimeout(() => {
+                    console.log(`Silêncio detectado por 3s no campo ${inputId}. Desativando...`);
+                    try { rec.abort(); } catch(err) {}
+                }, 3000);
+            }
+
+            function clearSilenceTimer() {
+                if (silenceTimer) {
+                    clearTimeout(silenceTimer);
+                    silenceTimer = null;
+                }
+            }
             
             document.querySelectorAll('.btn-voice-input').forEach(btn => {
                 const inputId = btn.getAttribute('data-input-id');
@@ -1039,9 +1083,11 @@
                         window.currentVoiceActiveButton = btn;
                         btn.classList.add('recording');
                         inputEl.placeholder = 'Fale agora...';
+                        startSilenceTimer(rec, inputId);
                     };
 
                     rec.onresult = (event) => {
+                        startSilenceTimer(rec, inputId); // Reinicia o timer de silêncio a cada nova fala
                         let finalT = '';
                         let interimT = '';
                         for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -1087,11 +1133,13 @@
 
                     rec.onerror = (event) => {
                         console.error('Erro de voz:', event.error);
+                        clearSilenceTimer();
                     };
 
                     rec.onend = () => {
                         btn.classList.remove('recording');
                         inputEl.placeholder = defaultPlaceholder;
+                        clearSilenceTimer();
                         if (window.currentVoiceRecognition === rec) {
                             window.currentVoiceRecognition = null;
                             window.currentVoiceActiveButton = null;
