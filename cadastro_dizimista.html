@@ -1021,6 +1021,11 @@
                     } catch(err) {
                         console.error('Erro ao iniciar mic:', err);
                         mostrarAviso('Erro ao iniciar microfone. Verifique as permissões de gravação.');
+                    }
+                }
+            });
+        })();
+
         // ===== Reconhecimento de Voz Reutilizável para Formulário =====
         (function() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
