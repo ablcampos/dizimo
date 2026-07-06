@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Novos Dizimistas</title>
+
+    <link rel="icon" type="image/png" href="logo2.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Variáveis já estão no style.css, aqui complementamos para o layout específico do form */
+        body {
+            background-color: var(--bg-dark); /* Usando var do style.css ou fallback */
+            background: #f1f5f9;
+            color: #0f172a;
+            padding: 40px 20px;
+            display: block !important;
+            overflow: auto !important;
+        }
+
+        body::before {
+            display: none;
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .header-top img {
+            height: 90px;
+            width: auto;
+        }
+
+        .header-top h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary, #4f46e5);
+            line-height: 1.2;
+        }
+
+        .page-subtitle {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 32px;
+            color: #334155;
+            text-transform: uppercase;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 32px;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 16px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            outline: none;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .search-container input:focus {
+            border-color: var(--primary, #4f46e5);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn-search {
+            padding: 0 24px;
+            background: var(--primary, #4f46e5);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn-search:hover {
+            background: var(--primary-hover, #4338ca);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Registration Form Styles */
+        .results-container {
+            background: #ffffff;
+            border-radius: 24px;
+            border: 1px solid #e2e8f0;
+            padding: 32px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .registration-form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .registration-form .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 0; /* Override style.css margin se houver */
+        }
+
+        .registration-form label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+
+        .registration-form input {
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .registration-form input:focus {
+            outline: none;
+            border-color: var(--primary, #4f46e5);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .required-asterisk {
+            color: #f43f5e;
+            margin-left: 4px;
+            font-weight: bold;
+        }
+
+        .btn-submit {
+            padding: 14px 32px;
+            background: var(--primary, #4f46e5);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-hover, #4338ca);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
+        
+        #divCadastro {
+            display: block; /* Modificado: sempre visível */
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 24px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            font-size: 64px;
+            color: #10b981;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        .modal h2 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #0f172a;
+        }
+
+        .modal p {
+            color: #64748b;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary, #4f46e5);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn:hover {
+            background: var(--primary-hover, #4338ca);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Code display styles */
+        .code-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #111;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .code-box {
+            background-color: #b91c1c; /* red-700 */
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .code-box strong {
+            color: #fcf0affb; /* gold */
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <!-- Cabeçalho -->
+        <header class="header-top">
+            <img src="logo2.png" alt="Logo Paróquia">
+            <h1>Paróquia Nossa Senhora Conceição de Rio Bonito</h1>
+        </header>
+
+        <h2 class="page-subtitle">Cadastro de Novos Dizimistas</h2>
+
+        <!-- Pesquisa -->
+        <div class="search-section">
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <input type="text" id="inputPesquisaNome" placeholder="Digite o nome do dizimista..." autocomplete="off">
+                </div>
+                <button type="button" class="btn-search" onclick="iniciarCadastro()">
+                    <i class="ph ph-magnifying-glass"></i> Pesquisar Nome
+                </button>
+            </div>
+        </div>
+
+        <!-- DIV de Resultados -->
+        <div class="results-container" id="divResultados" style="display: none; margin-bottom: 32px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="color: #334155;">Resultados da Pesquisa</h3>
+                <button type="button" class="btn-submit" onclick="voltarParaCadastro()" style="padding: 10px 20px; font-size: 14px; background: #64748b;">
+                    <i class="ph ph-arrow-left"></i> Retornar
+                </button>
+            </div>
+            <div id="tabelaResultados"></div>
+        </div>
+
+        <!-- DIV de Cadastro -->
+        <div class="results-container" id="divCadastro">
+            <h3 style="margin-bottom: 20px; color: #334155;">Ficha de Cadastro</h3>
+            <form id="formCadastrarDizimista" class="registration-form" novalidate>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="regNome">Nome Completo <span class="required-asterisk">*</span></label>
+                        <input type="text" id="regNome" maxlength="40" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="regEndereco">Endereço</label>
+                        <input type="text" id="regEndereco" maxlength="55">
+                    </div>
+                    <div class="input-group">
+                        <label for="regBairro">Bairro</label>
+                        <input type="text" id="regBairro" maxlength="25">
+                    </div>
+                    <div class="input-group">
+                        <label for="regCidade">Cidade</label>
+                        <input type="text" id="regCidade" value="RIO BONITO" maxlength="30">
+                    </div>
+                    <div class="input-group">
+                        <label for="regUF">UF</label>
+                        <input type="text" id="regUF" value="RJ" maxlength="2">
+                    </div>
+                    <div class="input-group">
+                        <label for="regTelefone">Telefone</label>
+                        <input type="text" id="regTelefone" maxlength="20">
+                    </div>
+                    <div class="input-group">
+                        <label for="regCPF">CPF</label>
+                        <input type="text" id="regCPF" maxlength="15">
+                    </div>
+                    <div class="input-group">
+                        <label for="regEmail">E-mail</label>
+                        <input type="email" id="regEmail" maxlength="50">
+                    </div>
+                    <div class="input-group">
+                        <label for="regReferencia">Referência</label>
+                        <input type="text" id="regReferencia" value="INTERNET" readonly style="background-color: #f1f5f9; color: #64748b; cursor: not-allowed; font-weight: 700; border-color: #cbd5e1;">
+                    </div>
+                    <div class="input-group">
+                        <label for="regNascimento">Data de Nascimento <span class="required-asterisk">*</span></label>
+                        <input type="text" id="regNascimento" placeholder="00/00/0000" maxlength="10">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">
+                        <i class="ph ph-floppy-disk"></i> Gravar Cadastro
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modais Profissionais -->
+    <div class="modal-overlay" id="modalSuccess">
+        <div class="modal">
+            <i class="ph ph-check-circle modal-icon"></i>
+            <h2 id="successTitle">Sucesso!</h2>
+            <p id="successMessage">Operação realizada com sucesso.</p>
+            <button class="modal-btn" onclick="fecharModal('modalSuccess')">OK</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalWarning">
+        <div class="modal">
+            <i class="ph ph-warning-circle modal-icon" style="color: #f59e0b;"></i>
+            <h2 id="warningTitle">Atenção</h2>
+            <p id="warningMessage">Mensagem de aviso.</p>
+            <button class="modal-btn" style="background: #f59e0b;" onclick="fecharModal('modalWarning')">Entendi</button>
+        </div>
+    </div>
+
+    <!-- Script de Configuração da API -->
+    <script src="config.js"></script>
+
+    <script>
+        // Funções do Modal
+        function mostrarSucesso(mensagem) {
+            document.getElementById('successMessage').innerHTML = mensagem;
+            document.getElementById('modalSuccess').classList.add('active');
+        }
+
+        function mostrarAviso(mensagem) {
+            document.getElementById('warningMessage').innerHTML = mensagem;
+            document.getElementById('modalWarning').classList.add('active');
+        }
+
+        function fecharModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+        // Função do Botão de Pesquisar Nome
+        async function iniciarCadastro() {
+            const inputNome = document.getElementById('inputPesquisaNome').value.trim();
+            const divCadastro = document.getElementById('divCadastro');
+            const divResultados = document.getElementById('divResultados');
+            const regNome = document.getElementById('regNome');
+            const btnSearch = document.querySelector('.btn-search');
+            const tabelaResultados = document.getElementById('tabelaResultados');
+            
+            if (inputNome === "") {
+                mostrarAviso("Por favor, digite um nome para pesquisar.");
+                return;
+            }
+
+            const originalIcon = btnSearch.innerHTML;
+            btnSearch.disabled = true;
+            btnSearch.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Pesquisando...';
+
+            try {
+                const baseUrl = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://localhost:3000/api';
+                const response = await fetch(`${baseUrl}/colaborador/procura/${encodeURIComponent(inputNome)}/S`);
+                const data = await response.json();
+
+                if (data && data.length > 0) {
+                    // Esconder o formulário de cadastro e mostrar resultados
+                    divCadastro.style.display = 'none';
+                    divResultados.style.display = 'block';
+
+                    let html = `<table style="width: 100%; border-collapse: collapse; text-align: left;">
+                                    <thead>
+                                        <tr style="border-bottom: 2px solid #e2e8f0;">
+                                            <th style="padding: 12px; color: #64748b;">Código</th>
+                                            <th style="padding: 12px; color: #64748b;">Nome do Dizimista</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>`;
+                    
+                    data.forEach(item => {
+                        html += `
+                                <tr style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 16px 12px;"><span style="background: var(--primary, #4f46e5); color: white; padding: 6px 16px; border-radius: 8px; font-weight: 800; font-size: 18px; letter-spacing: 1px; box-shadow: 0 4px 6px rgba(79, 70, 229, 0.3);">${item.idcolab}</span></td>
+                                    <td style="padding: 16px 12px; font-weight: 600; color: #0f172a;">${item.nome}</td>
+                                </tr>
+                        `;
+                    });
+                    html += `</tbody></table>`;
+                    tabelaResultados.innerHTML = html;
+                    
+                    divResultados.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    mostrarAviso(`Nenhum dizimista encontrado com o nome <strong>${inputNome}</strong>.<br>Você pode prosseguir com o cadastro.`);
+                    regNome.value = inputNome.toUpperCase();
+                    divCadastro.style.display = 'block';
+                    divResultados.style.display = 'none';
+                    divCadastro.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            } catch (error) {
+                console.error('Erro na pesquisa:', error);
+                mostrarAviso('Erro de conexão ao tentar pesquisar. Preencha o cadastro manualmente.');
+                regNome.value = inputNome.toUpperCase();
+                divCadastro.style.display = 'block';
+                divResultados.style.display = 'none';
+                divCadastro.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } finally {
+                btnSearch.disabled = false;
+                btnSearch.innerHTML = originalIcon;
+                // Limpar campo de pesquisa após ação
+                document.getElementById('inputPesquisaNome').value = '';
+            }
+        }
+
+        function voltarParaCadastro() {
+            document.getElementById('divResultados').style.display = 'none';
+            document.getElementById('divCadastro').style.display = 'block';
+            document.getElementById('inputPesquisaNome').value = '';
+            document.getElementById('divCadastro').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Lógica de Cadastro (mesma do dashboard)
+        const regForm = document.getElementById('formCadastrarDizimista');
+        const inputNascimento = document.getElementById('regNascimento');
+
+        // Upper Case e Normalização Automática (exceto data)
+        regForm.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', () => {
+                if (input.id !== 'regNascimento') {
+                    let val = input.value.toUpperCase();
+                    val = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    val = val.replace(/'/g, " ");
+                    input.value = val;
+                }
+            });
+        });
+        // Forçar maiúsculas no campo de pesquisa
+        const inputPesquisa = document.getElementById('inputPesquisaNome');
+        inputPesquisa.addEventListener('input', () => {
+            inputPesquisa.value = inputPesquisa.value.toUpperCase();
+        });
+
+        // Máscara de Data DD/MM/AAAA
+        inputNascimento.addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 8) v = v.substring(0, 8);
+
+            if (v.length > 4) {
+                v = v.replace(/^(\d{2})(\d{2})(\d{0,4}).*/, '$1/$2/$3');
+            } else if (v.length > 2) {
+                v = v.replace(/^(\d{2})(\d{0,2}).*/, '$1/$2');
+            }
+            e.target.value = v;
+        });
+
+        function validarData(data) {
+            const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+            if (!regex.test(data)) return false;
+            const [_, d, m, a] = data.match(regex);
+            const date = new Date(a, m - 1, d);
+            return date.getFullYear() == a && date.getMonth() == m - 1 && date.getDate() == d;
+        }
+
+        // Submit do formulário
+        regForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nome = document.getElementById('regNome').value.trim();
+            const dataNasc = inputNascimento.value.trim();
+
+            if (!nome || !dataNasc) {
+                mostrarAviso("Os campos <strong>NOME</strong> e <strong>DATA DE NASCIMENTO</strong> são obrigatórios para a realização do cadastro.");
+                return;
+            }
+
+            if (dataNasc && !validarData(dataNasc)) {
+                mostrarAviso("A <strong>DATA DE NASCIMENTO</strong> digitada é inválida.<br>Por favor, use o formato DD/MM/AAAA.");
+                inputNascimento.focus();
+                return;
+            }
+
+            let nascimentoISO = "";
+            if (dataNasc) {
+                const [d, m, a] = dataNasc.split('/');
+                nascimentoISO = `${a}-${m}-${d}`;
+            }
+
+            const payload = {
+                "IDCOLAB": "",
+                "NOME": nome,
+                "ENDE": document.getElementById('regEndereco').value,
+                "BAIRRO": document.getElementById('regBairro').value,
+                "CIDADE": document.getElementById('regCidade').value,
+                "UF": document.getElementById('regUF').value,
+                "TELE": document.getElementById('regTelefone').value,
+                "CPF": document.getElementById('regCPF').value,
+                "EMAIL": document.getElementById('regEmail').value,
+                "ATIVO": "S",
+                "REFERENCIA": document.getElementById('regReferencia').value,
+                "NASCIMENTO": nascimentoISO
+            };
+
+            const btnSubmit = regForm.querySelector('.btn-submit');
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Gravando...';
+
+            try {
+                // Utilizando API_BASE_URL do config.js
+                const baseUrl = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://localhost:3000/api';
+                
+                const response = await fetch(`${baseUrl}/colaborador`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                // Não precisamos usar o corpo da resposta aqui; vamos buscar novamente usando o nome enviado
+                if (response.ok) {
+                    // Busca o registro recém‑criado pelo nome
+                    const searchResp = await fetch(`${baseUrl}/colaborador/procura/${encodeURIComponent(payload.NOME)}/S`);
+                    const searchData = await searchResp.json();
+                    let codigo = '---';
+                    let nome = payload.NOME;
+                    if (searchData && searchData.length > 0) {
+                        codigo = searchData[0].idcolab;
+                        nome = searchData[0].nome;
+                    }
+                    mostrarSucesso(`<div class="code-title">Seu Código de Dimista é :</div><div class="code-box"><strong>${codigo}</strong></div><p>Nome: <strong>${nome}</strong> cadastrado com sucesso.</p>`);
+                    regForm.reset();
+                    // Valores padrões restaurados
+                    document.getElementById('regCidade').value = 'RIO BONITO';
+                    document.getElementById('regUF').value = 'RJ';
+                    document.getElementById('inputPesquisaNome').value = '';
+                } else {
+                    const errData = await response.json().catch(() => ({}));
+                    mostrarAviso('Erro ao gravar: ' + (errData.message || response.statusText));
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                mostrarAviso('Erro de conexão ao tentar cadastrar.');
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = '<i class="ph ph-floppy-disk"></i> Gravar Cadastro';
+            }
+        });
+    </script>
+</body>
+</html>
